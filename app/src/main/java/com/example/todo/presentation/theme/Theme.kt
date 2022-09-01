@@ -22,7 +22,7 @@ val TwilightColorPalette = lightColorScheme(
     surface = TwilightSecondaryVariant,
     onSurface = TwilightOn,
     error = Error,
-    onError = Color.White
+    onError = Color.White,
 )
 
 val LightColorPalette = lightColorScheme(
@@ -39,7 +39,7 @@ val LightColorPalette = lightColorScheme(
     surface = Color.White,
     onSurface = Color.Black,
     error = LightError,
-    onError = Color.White
+    onError = Color.White,
 )
 
 @Composable
