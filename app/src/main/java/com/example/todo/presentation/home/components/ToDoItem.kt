@@ -13,40 +13,40 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.example.todo.domian.model.*
+import com.example.todo.presentation.theme.MediumPadding
+import com.example.todo.presentation.theme.SmallPadding
 import com.example.todo.presentation.util.SwipeDismiss
 
 @Composable
-fun ListItem(
+fun ToDoItem(
     toDoList: ToDoList,
     onSwipeToDelete: () -> Unit,
-    onTaskItemClick: () -> Unit,
+    onItemClick: () -> Unit,
 ) {
     SwipeDismiss(
-        backgroundModifier = Modifier
-            .background(
-                MaterialTheme.colorScheme.secondary, RoundedCornerShape(20)
-            ),
+        backgroundModifier = Modifier.background(
+            MaterialTheme.colorScheme.secondary, MaterialTheme.shapes.large
+        ),
         backgroundSecondaryModifier = Modifier.clip(
-            RoundedCornerShape(20)
+            MaterialTheme.shapes.large
         ),
         onDismiss = { onSwipeToDelete() }
     ) {
         Box(
             modifier = Modifier
-                .padding(vertical = 8.dp)
+                .padding(vertical = SmallPadding)
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(20))
+                .clip(MaterialTheme.shapes.large)
                 .background(MaterialTheme.colorScheme.secondaryContainer)
                 .clickable {
-                    onTaskItemClick()
+                    onItemClick()
                 },
         ) {
             Row(
                 modifier = Modifier
-                    .padding(16.dp),
+                    .padding(MediumPadding),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
@@ -56,20 +56,24 @@ fun ListItem(
                         .size(35.dp)
                         .clip(CircleShape)
                         .background(toDoList.color.color())
-                        .padding(8.dp),
+                        .padding(SmallPadding),
                     tint = Color.White
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(SmallPadding))
                 Text(
                     text = toDoList.name,
+                    style = MaterialTheme.typography.bodyLarge
                 )
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = toDoList.tasks.size.toString())
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = toDoList.tasks.size.toString(),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Spacer(modifier = Modifier.width(SmallPadding))
                     Icon(
                         imageVector = Icons.Default.ArrowForwardIos,
                         contentDescription = Icons.Default.ArrowRight.name,

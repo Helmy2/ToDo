@@ -2,28 +2,28 @@ package com.example.todo.presentation.home.components
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.lazy.grid.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.List
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.todo.domian.model.ToDoColor
-import com.example.todo.domian.model.ToDoGroup
+import com.example.todo.domian.model.ToDoList
 import com.example.todo.presentation.theme.ToDoTheme
-import com.example.todo.presentation.util.dummyRandomGroup
+import com.example.todo.presentation.util.dummyRandomList
 
 @Composable
 fun CategoryListField(
-    list: List<ToDoGroup>,
-    onListItemClick: (ToDoGroup) -> Unit,
+    list: List<ToDoList>,
+    onListItemClick: (ToDoList) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(vertical = 16.dp),
-        modifier = modifier
+        modifier = modifier,
+        userScrollEnabled = false
     ) {
         if (list.size % 2 == 0) {
             items(
@@ -31,9 +31,9 @@ fun CategoryListField(
             ) {
                 CategoryItem(
                     icon = it.icon,
-                    iconBackgroundColor = it.iconColor,
+                    iconBackgroundColor = it.color,
                     title = it.name,
-                    itemNumber = it.lists.size,
+                    itemNumber = it.tasks.size,
                     onListItemClick = { onListItemClick(it) }
                 )
             }
@@ -44,18 +44,18 @@ fun CategoryListField(
             ) {
                 CategoryItem(
                     icon = it.icon,
-                    iconBackgroundColor = it.iconColor,
+                    iconBackgroundColor = it.color,
                     title = it.name,
-                    itemNumber = it.lists.size,
+                    itemNumber = it.tasks.size,
                     onListItemClick = { onListItemClick(it) }
                 )
             }
             item(span = { GridItemSpan(maxLineSpan) }) {
                 CategoryItem(
                     icon = list[lastIndex].icon,
-                    iconBackgroundColor = list[lastIndex].iconColor,
+                    iconBackgroundColor = list[lastIndex].color,
                     title = list[lastIndex].name,
-                    itemNumber = list[lastIndex].lists.size,
+                    itemNumber = list[lastIndex].tasks.size,
                     onListItemClick = { onListItemClick(list[lastIndex]) }
                 )
             }
@@ -73,7 +73,7 @@ fun CategoryListField(
 )
 @Composable
 private fun CategoryListPreview() {
-    val dummyData = dummyRandomGroup()
+    val dummyData = dummyRandomList()
     ToDoTheme {
         CategoryListField(dummyData, {})
     }

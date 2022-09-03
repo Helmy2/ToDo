@@ -2,13 +2,14 @@ package com.example.todo.presentation.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
-val TwilightColorPalette = lightColorScheme(
+val TwilightColorPalette = darkColorScheme(
     primary = TwilightPrimary,
     primaryContainer = TwilightPrimary,
     onPrimary = TwilightOn,

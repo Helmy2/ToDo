@@ -19,6 +19,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.todo.domian.model.*
 import com.example.todo.presentation.theme.CommonGrey
+import com.example.todo.presentation.theme.MediumPadding
+import com.example.todo.presentation.theme.SmallPadding
 import com.example.todo.presentation.theme.ToDoTheme
 
 @Composable
@@ -32,11 +34,11 @@ fun CategoryItem(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(8.dp)
-            .clip(RoundedCornerShape(20))
+            .padding(SmallPadding)
+            .clip(MaterialTheme.shapes.large)
             .clickable { onListItemClick() }
             .background(MaterialTheme.colorScheme.secondaryContainer)
-            .padding(16.dp)
+            .padding(MediumPadding)
     ) {
         Column {
             Icon(
@@ -46,10 +48,10 @@ fun CategoryItem(
                     .size(35.dp)
                     .clip(CircleShape)
                     .background(iconBackgroundColor.color())
-                    .padding(8.dp),
+                    .padding(SmallPadding),
                 tint = Color.White
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(MediumPadding))
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,

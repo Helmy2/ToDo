@@ -1,7 +1,5 @@
 package com.example.todo.presentation.util
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.List
 import com.example.todo.domian.model.*
 import java.time.LocalDateTime
 
@@ -12,29 +10,11 @@ fun dummyRandomList() = buildList(
     muchStep = 5
 )
 
-fun dummyRandomGroup() = buildGroup(
-    muchGroup = 3,
-    muchList = 10,
+fun dummyRandomCategory() = buildList(
+    muchList = 3,
     muchTask = 10,
     muchStep = 5
 )
-
-
-private fun buildGroup(
-    muchGroup: Int,
-    muchList: Int,
-    muchTask: Int,
-    muchStep: Int
-): List<ToDoGroup> {
-    return build(muchGroup) {
-        ToDoGroup(
-            name = "Group$it",
-            lists = buildList(muchList, muchTask, muchStep),
-            icon = Icons.Default.List,
-            iconColor = ToDoColor.values().random()
-        )
-    }
-}
 
 private fun buildList(
     muchList: Int,
