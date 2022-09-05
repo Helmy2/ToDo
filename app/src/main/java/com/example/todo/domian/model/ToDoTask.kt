@@ -8,9 +8,7 @@ data class ToDoTask(
     val completedAt: Long? = null,
     val dueDate: Long? = null,
     val isDueDateTimeSet: Boolean = false,
-    val repeat: ToDoRepeat = ToDoRepeat.NEVER,
     val note: String = "",
-    val noteUpdatedAt: Long? = null,
     val createdAt: Long,
     val updatedAt: Long,
 )

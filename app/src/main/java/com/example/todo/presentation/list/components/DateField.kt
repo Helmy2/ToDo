@@ -2,33 +2,36 @@ package com.example.todo.presentation.list.components
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Context
+import android.view.ContextThemeWrapper
+import android.widget.CalendarView
 import android.widget.DatePicker
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Timer
+import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import java.text.SimpleDateFormat
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.viewinterop.AndroidView
+import com.example.todo.R
+import com.example.todo.presentation.theme.ToDoTheme
+import com.example.todo.presentation.util.getCurrentDate
+import java.time.LocalDate
 import java.util.*
 
 @Composable
-fun DateField(context: Context, onDateChange: (date: Long) -> Unit, currantDate: Long) {
+fun DateButton(onDateChange: (date: Long) -> Unit, currantDate: Long) {
+    val context = LocalContext.current
     val calendar = Calendar.getInstance()
     calendar.timeInMillis = currantDate
 
-    val locale = Locale.getDefault()
-    val dateFormatter = SimpleDateFormat("yyyy.MM.dd", locale)
-    val timeFormatter = SimpleDateFormat("h:mm a", locale)
-
     val timePickerDialog = TimePickerDialog(
-        context,
-        { _, hour, minute ->
+        context, { _, hour, minute ->
             calendar[Calendar.HOUR_OF_DAY] = hour
             calendar[Calendar.MINUTE] = minute
 
@@ -42,42 +45,30 @@ fun DateField(context: Context, onDateChange: (date: Long) -> Unit, currantDate:
             calendar[Calendar.MONTH] = month
             calendar[Calendar.DAY_OF_MONTH] = day
 
-            onDateChange(calendar.timeInMillis)
+            timePickerDialog.show()
         }, calendar[Calendar.YEAR], calendar[Calendar.MONTH], calendar[Calendar.DAY_OF_MONTH]
     )
 
-    Column {
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clickable {
-                datePickerDialog.show()
-            }) {
-            Icon(
-                imageVector = Icons.Default.DateRange,
-                contentDescription = "",
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text("Date")
-            Spacer(modifier = Modifier.width(16.dp))
-            Text(text = dateFormatter.format(calendar.timeInMillis))
-        }
+    IconButton(
+        onClick = { datePickerDialog.show() },
+        modifier = Modifier.clip(CircleShape),
+        colors = IconButtonDefaults.iconButtonColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+        ),
+    ) {
+        androidx.compose.material3.Icon(
+            imageVector = Icons.Default.CalendarToday, contentDescription = "Calendar"
+        )
+    }
+}
 
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clickable {
-                timePickerDialog.show()
-            }) {
-            Icon(
-                imageVector = Icons.Default.Timer,
-                contentDescription = "",
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text("Time")
-            Spacer(modifier = Modifier.width(16.dp))
-            Text(text = timeFormatter.format(calendar.timeInMillis))
-        }
+@Preview
+@Composable
+fun DateFieldPreview() {
+    ToDoTheme {
+        DateButton(
+            onDateChange = {}, currantDate = getCurrentDate()
+        )
     }
 }
