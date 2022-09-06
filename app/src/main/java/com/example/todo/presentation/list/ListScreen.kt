@@ -9,7 +9,9 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import com.example.todo.domian.model.ToDoList
 import com.example.todo.domian.model.ToDoTask
 import com.example.todo.presentation.list.components.BottomSheet
@@ -18,7 +20,10 @@ import com.example.todo.presentation.list.components.TaskList
 import com.example.todo.presentation.theme.LargePadding
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
+@OptIn(
+    ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class,
+    ExperimentalComposeUiApi::class
+)
 @Composable
 fun ListScreen(
     toDoList: ToDoList,
@@ -30,13 +35,16 @@ fun ListScreen(
 ) {
     val state = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val scope = rememberCoroutineScope()
+    val keyboard = LocalSoftwareKeyboardController.current
+    LaunchedEffect(key1 = state) {
+        if (state.currentValue == ModalBottomSheetValue.Hidden)
+            keyboard?.hide()
+    }
 
     ModalBottomSheetLayout(
         sheetState = state,
         sheetContent = {
-            BottomSheet {
-                scope.launch { state.hide() }
-            }
+            BottomSheet(toDoList.color)
         },
     ) {
         Scaffold(
