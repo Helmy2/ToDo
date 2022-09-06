@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -20,10 +21,9 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import java.util.*
 
 @Composable
-fun DateTimePikerField(onDateChange: (date: Long) -> Unit, currantDate: Long) {
+fun DateTimePikerField(currantDate: Long, onDoneClicked: (date: Long) -> Unit) {
     val context = LocalContext.current as AppCompatActivity
-    val calendar = Calendar.getInstance()
-    calendar.timeInMillis = currantDate
+    val calendar = Calendar.getInstance().also { it.timeInMillis = currantDate }
 
     val february = calendar.timeInMillis
     val constraintsBuilder =
@@ -53,7 +53,7 @@ fun DateTimePikerField(onDateChange: (date: Long) -> Unit, currantDate: Long) {
         calendar[Calendar.HOUR_OF_DAY] = timePicker.hour
         calendar[Calendar.MINUTE] = timePicker.minute
 
-        onDateChange(calendar.timeInMillis)
+        onDoneClicked(calendar.timeInMillis)
     }
 
     IconButton(
@@ -66,7 +66,7 @@ fun DateTimePikerField(onDateChange: (date: Long) -> Unit, currantDate: Long) {
             contentColor = MaterialTheme.colorScheme.onSecondaryContainer
         ),
     ) {
-        androidx.compose.material3.Icon(
+        Icon(
             imageVector = Icons.Default.CalendarToday, contentDescription = "Calendar"
         )
     }
@@ -77,7 +77,7 @@ fun DateTimePikerField(onDateChange: (date: Long) -> Unit, currantDate: Long) {
 fun DateTimePikerFieldPreview() {
     ToDoTheme {
         DateTimePikerField(
-            onDateChange = {}, currantDate = getCurrentDate()
+            onDoneClicked = {}, currantDate = getCurrentDate()
         )
     }
 }

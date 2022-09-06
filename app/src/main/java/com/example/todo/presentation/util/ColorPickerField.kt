@@ -1,4 +1,4 @@
-package com.example.todo.presentation.list.components
+package com.example.todo.presentation.util
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

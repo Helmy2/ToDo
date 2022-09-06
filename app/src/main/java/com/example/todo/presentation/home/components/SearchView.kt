@@ -24,13 +24,6 @@ fun SearchView(
     onTextUpdate: (text: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val focusManager = LocalFocusManager.current
-    val focusRequester = remember { FocusRequester() }
-
-    DisposableEffect(Unit) {
-        focusRequester.requestFocus()
-        onDispose { }
-    }
 
     OutlinedTextField(
         value = text,
@@ -46,9 +39,7 @@ fun SearchView(
         leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
         placeholder = { Text(text = "Search") },
         modifier = modifier
-            .fillMaxWidth()
-            .focusRequester(focusRequester),
+            .fillMaxWidth(),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
     )
 }

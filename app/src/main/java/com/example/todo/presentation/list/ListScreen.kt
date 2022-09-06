@@ -14,10 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import com.example.todo.domian.model.ToDoList
 import com.example.todo.domian.model.ToDoTask
-import com.example.todo.presentation.list.components.BottomSheet
+import com.example.todo.presentation.list.components.ToDoBottomSheet
 import com.example.todo.presentation.list.components.ListScreenTopBar
 import com.example.todo.presentation.list.components.TaskList
 import com.example.todo.presentation.theme.LargePadding
+import com.example.todo.presentation.util.getCurrentDate
 import kotlinx.coroutines.launch
 
 @OptIn(
@@ -30,28 +31,38 @@ fun ListScreen(
     onItemClick: (ToDoTask) -> Unit,
     onSwipeToDelete: (ToDoTask) -> Unit,
     onCheckItemClick: (ToDoTask) -> Unit,
-    onAddToDoItemClick: () -> Unit,
+    onAddToDoItemClick: (ToDoTask) -> Unit,
     onBackClicked: () -> Unit,
 ) {
-    val state = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-    val scope = rememberCoroutineScope()
+    val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    val coroutineScope = rememberCoroutineScope()
     val keyboard = LocalSoftwareKeyboardController.current
-    LaunchedEffect(key1 = state) {
-        if (state.currentValue == ModalBottomSheetValue.Hidden)
+    LaunchedEffect(key1 = bottomSheetState) {
+        if (bottomSheetState.currentValue == ModalBottomSheetValue.Hidden)
             keyboard?.hide()
     }
 
     ModalBottomSheetLayout(
-        sheetState = state,
+        sheetState = bottomSheetState,
         sheetContent = {
-            BottomSheet(toDoList.color)
+            ToDoBottomSheet { title, note, date ->
+                onAddToDoItemClick(
+                    ToDoTask(
+                        name = title, note = note,
+                        listId = toDoList.id,
+                        dueDate = date,
+                        createdAt = getCurrentDate(),
+                        updatedAt = getCurrentDate()
+                    )
+                )
+            }
         },
     ) {
         Scaffold(
             topBar = { ListScreenTopBar(onBackClicked, toDoList) },
             floatingActionButton = {
                 FloatingActionButton(onClick = {
-                    scope.launch { state.show() }
+                    coroutineScope.launch { bottomSheetState.show() }
                 }) {
                     Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
                 }

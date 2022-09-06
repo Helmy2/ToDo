@@ -15,7 +15,6 @@ fun HomeRoute(
         categories = groups,
         onDrawerClicked = {},
         onAddListClicked = {},
-        onAddToDoClicked = {},
         onListItemClick = {},
         onDeleteListItemClick = {},
         onCategoryItemClick = {},
