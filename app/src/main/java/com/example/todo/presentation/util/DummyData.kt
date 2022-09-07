@@ -22,7 +22,7 @@ private fun buildList(
 ): List<ToDoList> {
     return build(muchList) {
         ToDoList(
-            id = "list$it",
+            id = "List$it",
             name = "List$it",
             color = ToDoColor.values().random(),
             tasks = buildTask(muchTask),
@@ -37,7 +37,8 @@ private fun buildTask(
 ): List<ToDoTask> {
     return build(muchTask) {
         ToDoTask(
-            id = "task$it",
+            id = "$it",
+            listId = "Task$it",
             name = "Task$it",
             status = ToDoStatus.values().random(),
             createdAt = getCurrentDate(),

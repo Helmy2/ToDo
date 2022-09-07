@@ -2,7 +2,7 @@ package com.example.todo.domian.model
 
 data class ToDoTask(
     val id: String = "",
-    val listId: String = "",
+    val listId: String,
     val name: String = "",
     val status: ToDoStatus = ToDoStatus.IN_PROGRESS,
     val completedAt: Long? = null,

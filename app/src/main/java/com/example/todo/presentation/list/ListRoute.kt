@@ -1,24 +1,31 @@
 package com.example.todo.presentation.list
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import com.example.todo.domian.model.ToDoColor
-import com.example.todo.domian.model.ToDoList
-import com.example.todo.domian.model.ToDoTask
+import androidx.compose.runtime.LaunchedEffect
+import androidx.navigation.NavController
 import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun ListRoute(
-    toDoList: ToDoList?,
+    id: String,
+    controller: NavController,
     viewModel: ListViewModel = getViewModel()
 ) {
-    ListScreen(
-        toDoList = toDoList!!,
-        onItemClick = {},
-        onSwipeToDelete = {},
-        onBackClicked = {},
-        onCheckItemClick = {},
-        onAddToDoItemClick = {}
-    )
+    LaunchedEffect(null) {
+        viewModel.getToDoList(id)
+    }
+
+    val toDoList = viewModel.listState.value
+
+    toDoList?.let {
+        ListScreen(
+            toDoList = toDoList,
+            onItemClick = {},
+            onSwipeToDelete = {},
+            onBackClicked = { controller.popBackStack() },
+            onCheckItemClick = {},
+            onAddToDoItemClick = {}
+        )
+    }
 }
 

@@ -64,6 +64,10 @@ fun HomeScreen(
                         updatedAt = getCurrentDate()
                     )
                 )
+                coroutineScope.launch {
+                    bottomSheetState.hide()
+                    keyboard?.hide()
+                }
             }
         },
     ) {
