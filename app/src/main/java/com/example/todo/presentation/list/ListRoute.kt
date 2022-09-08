@@ -2,14 +2,14 @@ package com.example.todo.presentation.list
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun ListRoute(
     id: String,
     controller: NavController,
-    viewModel: ListViewModel = getViewModel()
+    viewModel: ListViewModel = hiltViewModel()
 ) {
     LaunchedEffect(null) {
         viewModel.getToDoList(id)

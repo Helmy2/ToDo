@@ -7,9 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.todo.domian.model.ToDoList
 import com.example.todo.domian.repository.ToDoRepo
 import com.example.todo.presentation.util.dummyRandomList
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ListViewModel(
+@HiltViewModel
+class ListViewModel @Inject constructor(
     private val repo: ToDoRepo
 ) : ViewModel() {
     private val _listState = mutableStateOf<ToDoList?>(null)

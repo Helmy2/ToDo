@@ -9,12 +9,15 @@ import com.example.todo.domian.model.ToDoList
 import com.example.todo.domian.repository.ToDoRepo
 import com.example.todo.presentation.util.dummyRandomCategory
 import com.example.todo.presentation.util.dummyRandomList
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 private const val TAG = "HomeViewModel"
 
-class HomeViewModel(
+@HiltViewModel
+class HomeViewModel @Inject constructor(
     private val repo: ToDoRepo
 ) : ViewModel() {
     val groupState: MutableState<List<ToDoList>> = mutableStateOf(emptyList())
