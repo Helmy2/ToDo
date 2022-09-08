@@ -1,42 +1,55 @@
 package com.example.todo.data.repository
 
+import com.example.todo.data.datasource.local.LocalManager
+import com.example.todo.data.datasource.local.extension.toToDoList
+import com.example.todo.data.datasource.local.extension.toToDoListDb
+import com.example.todo.data.datasource.local.model.ToDoListDb
+import com.example.todo.domian.model.ToDoColor
 import com.example.todo.domian.model.ToDoList
 import com.example.todo.domian.model.ToDoTask
 import com.example.todo.domian.repository.ToDoRepo
 import com.example.todo.presentation.util.dummyRandomCategory
-import com.example.todo.presentation.util.dummyRandomList
-import okhttp3.internal.toImmutableList
+import com.example.todo.presentation.util.getCurrentDate
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import java.util.*
+import javax.inject.Inject
 
-class ToDoRepoImpl : ToDoRepo {
+class ToDoRepoImpl @Inject constructor(
+    private val localManager: LocalManager
+) : ToDoRepo {
     val list = mutableListOf<ToDoList>()
 
     init {
         list.addAll(dummyRandomCategory())
     }
 
-    override suspend fun createToDoList(toDoList: ToDoList) {
-        list.add(toDoList)
+    override suspend fun createToDoList(title: String, color: ToDoColor) {
+        localManager.insertList(
+            ToDoList(
+                id = UUID.randomUUID().toString(),
+                name = title,
+                color = color,
+                createdAt = getCurrentDate(),
+                updatedAt = getCurrentDate()
+            )
+        )
     }
 
     override suspend fun updateToDoList(toDoList: ToDoList) {
-        list.removeIf { it.id == toDoList.id }
-        list.add(toDoList)
+        localManager.updateList(toDoList)
     }
 
     override suspend fun deleteToDoList(id: String) {
-        list.removeIf { it.id == id }
+        localManager.deleteList(id)
     }
 
-    override suspend fun getToDoList(id: String): Result<ToDoList> {
-        return try {
-            Result.success(list.find { it.id == id }!!)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
+    override fun getToDoList(id: String): Flow<ToDoList> {
+        return localManager.getListById(id)
     }
 
-    override suspend fun getAllToDoLists(): Result<List<ToDoList>> {
-        return Result.success(list.toImmutableList())
+    override fun getAllToDoLists(): Flow<List<ToDoList>> {
+        return localManager.getLists()
     }
 
     override suspend fun createToDoTask(toDoTask: ToDoTask) {

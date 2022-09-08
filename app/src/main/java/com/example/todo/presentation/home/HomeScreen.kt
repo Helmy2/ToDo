@@ -37,7 +37,7 @@ fun HomeScreen(
     lists: List<ToDoList>,
     categories: List<ToDoList>,
     onDrawerClicked: () -> Unit,
-    onAddListClicked: (ToDoList) -> Unit,
+    onAddListClicked: (title: String, color: ToDoColor) -> Unit,
     onSearchClick: (String) -> Unit,
     onListItemClick: (ToDoList) -> Unit,
     onCategoryItemClick: (ToDoList) -> Unit,
@@ -56,14 +56,7 @@ fun HomeScreen(
         sheetState = bottomSheetState,
         sheetContent = {
             ListBottomSheet(ToDoColor.BLUE) { title, color ->
-                onAddListClicked(
-                    ToDoList(
-                        name = title,
-                        color = color,
-                        createdAt = getCurrentDate(),
-                        updatedAt = getCurrentDate()
-                    )
-                )
+                onAddListClicked(title, color)
                 coroutineScope.launch {
                     bottomSheetState.hide()
                     keyboard?.hide()

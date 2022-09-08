@@ -1,9 +1,11 @@
 package com.example.todo.presentation.list
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import javax.inject.Inject
 
 @Composable
 fun ListRoute(
@@ -11,15 +13,12 @@ fun ListRoute(
     controller: NavController,
     viewModel: ListViewModel = hiltViewModel()
 ) {
-    LaunchedEffect(null) {
-        viewModel.getToDoList(id)
-    }
 
-    val toDoList = viewModel.listState.value
+    val toDoList by viewModel.getToDoList(id).collectAsState(initial = null)
 
     toDoList?.let {
         ListScreen(
-            toDoList = toDoList,
+            toDoList = it,
             onItemClick = {},
             onSwipeToDelete = {},
             onBackClicked = { controller.popBackStack() },

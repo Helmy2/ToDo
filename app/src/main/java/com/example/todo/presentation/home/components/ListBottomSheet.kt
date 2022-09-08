@@ -24,13 +24,17 @@ import com.example.todo.presentation.util.DefaultTextField
 @Composable
 fun ListBottomSheet(
     toDoColor: ToDoColor,
-    onSaveButtonClicked: (title: String,color: ToDoColor) -> Unit
+    onSaveButtonClicked: (title: String, color: ToDoColor) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     var title by remember { mutableStateOf("") }
     var color by remember { mutableStateOf(toDoColor) }
     var showColorDialog by remember { mutableStateOf(false) }
+    var valid by remember { mutableStateOf(true) }
 
+    LaunchedEffect(key1 = title, block = {
+        valid = title.isNotBlank()
+    })
     if (showColorDialog)
         Dialog(onDismissRequest = { showColorDialog = false }) {
             ColorPickerField(
@@ -77,7 +81,7 @@ fun ListBottomSheet(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                TextButton(onClick = { onSaveButtonClicked(title, color) }) {
+                TextButton(onClick = { onSaveButtonClicked(title, color) }, enabled = valid) {
                     Text(text = "Save")
                 }
             }
@@ -89,6 +93,6 @@ fun ListBottomSheet(
 @Composable
 fun BottomSheetPreview() {
     ToDoTheme {
-        ListBottomSheet(toDoColor = ToDoColor.BLUE, onSaveButtonClicked = { _, _,  -> })
+        ListBottomSheet(toDoColor = ToDoColor.BLUE, onSaveButtonClicked = { _, _ -> })
     }
 }
