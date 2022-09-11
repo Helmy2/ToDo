@@ -49,6 +49,7 @@ fun TaskItem(
                 .padding(vertical = SmallPadding)
                 .fillMaxWidth()
                 .clip(MaterialTheme.shapes.medium)
+                .background(MaterialTheme.colorScheme.secondaryContainer)
                 .clickable {
                     onTaskItemClick()
                 }

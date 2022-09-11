@@ -1,27 +1,23 @@
 package com.example.todo.data.repository
 
 import com.example.todo.data.datasource.local.LocalManager
+import com.example.todo.data.datasource.local.extension.toToDoListDb
+import com.example.todo.data.datasource.local.extension.toToDoTask
 import com.example.todo.data.datasource.local.model.ToDoListDb
 import com.example.todo.data.datasource.local.model.ToDoTaskDb
-import com.example.todo.domian.model.ToDoColor
-import com.example.todo.domian.model.ToDoList
-import com.example.todo.domian.model.ToDoStatus
-import com.example.todo.domian.model.ToDoTask
+import com.example.todo.domian.model.*
 import com.example.todo.domian.repository.ToDoRepo
-import com.example.todo.presentation.util.dummyRandomCategory
 import com.example.todo.presentation.util.getCurrentDate
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import java.util.*
 import javax.inject.Inject
 
 class ToDoRepoImpl @Inject constructor(
     private val localManager: LocalManager
 ) : ToDoRepo {
-    val list = mutableListOf<ToDoList>()
-
-    init {
-        list.addAll(dummyRandomCategory())
-    }
 
     override suspend fun createToDoList(title: String, color: ToDoColor) {
         localManager.insertList(
@@ -36,7 +32,7 @@ class ToDoRepoImpl @Inject constructor(
     }
 
     override suspend fun updateToDoList(toDoList: ToDoList) {
-        localManager.updateList(toDoList)
+        localManager.updateList(toDoList.toToDoListDb())
     }
 
     override suspend fun deleteToDoList(id: String) {
@@ -49,6 +45,24 @@ class ToDoRepoImpl @Inject constructor(
 
     override fun getAllToDoLists(): Flow<List<ToDoList>> {
         return localManager.getLists()
+    }
+
+    override fun getAllToDoCategory(): Flow<List<Category>> {
+        return flow {
+            emit(
+                listOf(
+                    Category.Today(
+                        localManager.getToDayTasks().first().map { it.toToDoTask() }
+                    ),
+                    Category.All(
+                        localManager.getAllTasks().first().map { it.toToDoTask() }
+                    ),
+                    Category.Scheduled(
+                        localManager.getScheduledTasks().first().map { it.toToDoTask() }
+                    )
+                )
+            )
+        }
     }
 
     override suspend fun createToDoTask(
@@ -74,13 +88,21 @@ class ToDoRepoImpl @Inject constructor(
     }
 
     override suspend fun updateToDoTask(toDoTask: ToDoTask) {
+        localManager.updateTask(
+            id = toDoTask.id,
+            name = toDoTask.name,
+            note = toDoTask.note,
+            status = toDoTask.status,
+            dueDate = toDoTask.dueDate,
+            createdAt = toDoTask.createdAt,
+            updatedAt = getCurrentDate(),
+            isDueDateTimeSet = toDoTask.isDueDateTimeSet,
+            completedAt = toDoTask.completedAt
+        )
     }
 
-    override suspend fun deleteToDoTask(toDoTask: ToDoTask) {
-    }
-
-    override suspend fun getToDoTask(id: String): Result<ToDoTask> {
-        return Result.success(list.first().tasks.first())
+    override suspend fun deleteToDoTask(id: String) {
+        localManager.deleteTask(id)
     }
 
 }

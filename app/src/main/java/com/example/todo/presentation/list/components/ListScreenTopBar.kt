@@ -16,9 +16,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.todo.domian.model.ToDoList
 import com.example.todo.presentation.theme.LargePadding
+import com.example.todo.presentation.theme.MediumPadding
 
 @Composable
- fun ListScreenTopBar(
+fun ListScreenTopBar(
     onBackClicked: () -> Unit,
     toDoList: ToDoList
 ) {
@@ -27,7 +28,7 @@ import com.example.todo.presentation.theme.LargePadding
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(LargePadding)
+            .padding(horizontal = MediumPadding, vertical = LargePadding)
     ) {
         IconButton(onClick = onBackClicked) {
             Icon(

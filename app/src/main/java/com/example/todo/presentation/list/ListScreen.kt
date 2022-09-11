@@ -18,6 +18,7 @@ import com.example.todo.presentation.list.components.ToDoBottomSheet
 import com.example.todo.presentation.list.components.ListScreenTopBar
 import com.example.todo.presentation.list.components.TaskList
 import com.example.todo.presentation.theme.LargePadding
+import com.example.todo.presentation.theme.MediumPadding
 import com.example.todo.presentation.util.getCurrentDate
 import kotlinx.coroutines.launch
 
@@ -70,7 +71,7 @@ fun ListScreen(
             Column(
                 modifier = Modifier
                     .padding(it)
-                    .padding(horizontal = LargePadding)
+                    .padding(horizontal = MediumPadding)
             ) {
                 TaskList(
                     list = toDoList.tasks,

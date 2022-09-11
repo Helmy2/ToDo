@@ -1,23 +1,18 @@
 package com.example.todo.presentation.home.components
 
-import android.content.res.Configuration
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import com.example.todo.domian.model.Category
 import com.example.todo.domian.model.ToDoList
-import com.example.todo.presentation.theme.ToDoTheme
-import com.example.todo.presentation.util.dummyRandomList
 
 @Composable
 fun CategoryListField(
-    list: List<ToDoList>,
-    onListItemClick: (ToDoList) -> Unit,
+    list: List<Category>,
+    onListItemClick: (Category) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyVerticalGrid(
@@ -33,7 +28,7 @@ fun CategoryListField(
                     icon = it.icon,
                     iconBackgroundColor = it.color,
                     title = it.name,
-                    itemNumber = it.tasks.size,
+                    itemNumber = it.list.size,
                     onListItemClick = { onListItemClick(it) }
                 )
             }
@@ -46,7 +41,7 @@ fun CategoryListField(
                     icon = it.icon,
                     iconBackgroundColor = it.color,
                     title = it.name,
-                    itemNumber = it.tasks.size,
+                    itemNumber = it.list.size,
                     onListItemClick = { onListItemClick(it) }
                 )
             }
@@ -55,28 +50,11 @@ fun CategoryListField(
                     icon = list[lastIndex].icon,
                     iconBackgroundColor = list[lastIndex].color,
                     title = list[lastIndex].name,
-                    itemNumber = list[lastIndex].tasks.size,
+                    itemNumber = list[lastIndex].list.size,
                     onListItemClick = { onListItemClick(list[lastIndex]) }
                 )
             }
         }
     }
 }
-
-
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    showBackground = true
-)
-@Preview(
-    showBackground = true
-)
-@Composable
-private fun CategoryListPreview() {
-    val dummyData = dummyRandomList()
-    ToDoTheme {
-        CategoryListField(dummyData, {})
-    }
-}
-
 

@@ -1,5 +1,6 @@
 package com.example.todo.domian.repository
 
+import com.example.todo.domian.model.Category
 import com.example.todo.domian.model.ToDoColor
 import com.example.todo.domian.model.ToDoList
 import com.example.todo.domian.model.ToDoTask
@@ -12,9 +13,9 @@ interface ToDoRepo {
     fun getToDoList(id: String): Flow<ToDoList>
 
     fun getAllToDoLists(): Flow<List<ToDoList>>
+    fun getAllToDoCategory(): Flow<List<Category>>
 
-    suspend fun createToDoTask(toDoTask: String, note: String, duDate: Long?, listId: String)
+    suspend fun createToDoTask(name: String, note: String, duDate: Long?, listId: String)
     suspend fun updateToDoTask(toDoTask: ToDoTask)
-    suspend fun deleteToDoTask(toDoTask: ToDoTask)
-    suspend fun getToDoTask(id: String): Result<ToDoTask>
+    suspend fun deleteToDoTask(id: String)
 }

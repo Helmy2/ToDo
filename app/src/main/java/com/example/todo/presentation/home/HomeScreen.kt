@@ -12,10 +12,12 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import com.example.todo.domian.model.Category
 import com.example.todo.domian.model.ToDoColor
 import com.example.todo.domian.model.ToDoList
 import com.example.todo.presentation.home.components.CategoryListField
@@ -24,7 +26,6 @@ import com.example.todo.presentation.home.components.ListBottomSheet
 import com.example.todo.presentation.home.components.ToDoList
 import com.example.todo.presentation.theme.MediumPadding
 import com.example.todo.presentation.theme.SmallPadding
-import com.example.todo.presentation.util.getCurrentDate
 import kotlinx.coroutines.launch
 
 
@@ -35,12 +36,12 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(
     lists: List<ToDoList>,
-    categories: List<ToDoList>,
+    categories: List<Category>,
     onDrawerClicked: () -> Unit,
     onAddListClicked: (title: String, color: ToDoColor) -> Unit,
     onSearchClick: (String) -> Unit,
     onListItemClick: (ToDoList) -> Unit,
-    onCategoryItemClick: (ToDoList) -> Unit,
+    onCategoryItemClick: (Category) -> Unit,
     onDeleteListItemClick: (ToDoList) -> Unit,
 ) {
 
