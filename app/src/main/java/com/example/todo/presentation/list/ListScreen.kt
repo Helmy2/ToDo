@@ -31,7 +31,7 @@ fun ListScreen(
     onItemClick: (ToDoTask) -> Unit,
     onSwipeToDelete: (ToDoTask) -> Unit,
     onCheckItemClick: (ToDoTask) -> Unit,
-    onAddToDoItemClick: (ToDoTask) -> Unit,
+    onAddToDoItemClick: (title: String, note: String, dueDate: Long?, listId: String) -> Unit,
     onBackClicked: () -> Unit,
 ) {
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
@@ -47,14 +47,13 @@ fun ListScreen(
         sheetContent = {
             ToDoBottomSheet { title, note, date ->
                 onAddToDoItemClick(
-                    ToDoTask(
-                        name = title, note = note,
-                        listId = toDoList.id,
-                        dueDate = date,
-                        createdAt = getCurrentDate(),
-                        updatedAt = getCurrentDate()
-                    )
+                    title, note, date,
+                    toDoList.id
                 )
+                coroutineScope.launch {
+                    bottomSheetState.hide()
+                    keyboard?.hide()
+                }
             }
         },
     ) {

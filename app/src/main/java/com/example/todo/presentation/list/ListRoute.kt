@@ -23,7 +23,9 @@ fun ListRoute(
             onSwipeToDelete = {},
             onBackClicked = { controller.popBackStack() },
             onCheckItemClick = {},
-            onAddToDoItemClick = {}
+            onAddToDoItemClick = { title, note, duDate, listId ->
+                viewModel.addToDoTask( title, note, duDate, listId)
+            }
         )
     }
 }

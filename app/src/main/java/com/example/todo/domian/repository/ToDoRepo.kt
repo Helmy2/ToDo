@@ -13,7 +13,7 @@ interface ToDoRepo {
 
     fun getAllToDoLists(): Flow<List<ToDoList>>
 
-    suspend fun createToDoTask(toDoTask: ToDoTask)
+    suspend fun createToDoTask(toDoTask: String, note: String, duDate: Long?, listId: String)
     suspend fun updateToDoTask(toDoTask: ToDoTask)
     suspend fun deleteToDoTask(toDoTask: ToDoTask)
     suspend fun getToDoTask(id: String): Result<ToDoTask>

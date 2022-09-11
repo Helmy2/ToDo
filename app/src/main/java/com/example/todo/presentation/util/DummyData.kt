@@ -38,7 +38,6 @@ private fun buildTask(
     return build(muchTask) {
         ToDoTask(
             id = "$it",
-            listId = "Task$it",
             name = "Task$it",
             status = ToDoStatus.values().random(),
             createdAt = getCurrentDate(),

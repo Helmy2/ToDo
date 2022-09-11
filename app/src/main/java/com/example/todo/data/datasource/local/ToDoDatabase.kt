@@ -4,14 +4,9 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.todo.data.datasource.local.model.ToDoListDb
 import com.example.todo.data.datasource.local.model.ToDoTaskDb
-import com.example.todo.presentation.util.getCurrentDate
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 @Database(
     entities = [
