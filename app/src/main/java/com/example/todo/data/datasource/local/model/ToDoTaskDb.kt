@@ -1,9 +1,22 @@
 package com.example.todo.data.datasource.local.model
 
 import androidx.room.*
+import androidx.room.ForeignKey.CASCADE
 import com.example.todo.domian.model.ToDoStatus
 
-@Entity
+@Entity(
+    foreignKeys = [
+        ForeignKey(
+            entity = ToDoListDb::class,
+            parentColumns = ["list_id"],
+            childColumns = ["task_list_id"],
+            onDelete = CASCADE
+        )
+    ],
+    indices = [
+        Index("task_list_id"),
+    ]
+)
 data class ToDoTaskDb(
     @PrimaryKey
     @ColumnInfo(name = "task_id")

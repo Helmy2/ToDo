@@ -55,7 +55,7 @@ fun ToDoTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable (
 
     SideEffect {
         systemUiController.setSystemBarsColor(
-            color = colors.surface,
+            color = colors.background,
             darkIcons = !darkTheme,
             isNavigationBarContrastEnforced = false,
         )

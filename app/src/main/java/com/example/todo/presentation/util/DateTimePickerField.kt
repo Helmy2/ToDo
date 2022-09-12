@@ -1,4 +1,4 @@
-package com.example.todo.presentation.list.components
+package com.example.todo.presentation.util
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.shape.CircleShape
@@ -14,7 +14,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.todo.presentation.theme.ToDoTheme
-import com.example.todo.presentation.util.getCurrentDate
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker

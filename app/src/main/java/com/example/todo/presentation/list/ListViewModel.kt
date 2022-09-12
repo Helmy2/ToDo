@@ -1,5 +1,6 @@
 package com.example.todo.presentation.list
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todo.domian.model.ToDoList
@@ -12,11 +13,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ListViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val repo: ToDoRepo,
 ) : ViewModel() {
-    fun getToDoList(id: String): Flow<ToDoList> {
-        return repo.getToDoList(id)
-    }
+
+    private val listId: String = checkNotNull(savedStateHandle["id"])
+
+    val toDoListFlow: Flow<ToDoList> = repo.getToDoList(listId)
 
     fun addToDoTask(title: String, note: String, duDate: Long?, listId: String) =
         viewModelScope.launch {

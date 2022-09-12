@@ -6,16 +6,14 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.todo.domian.model.ToDoStatus
-import javax.inject.Inject
 
 @Composable
 fun ListRoute(
-    id: String,
     controller: NavController,
     viewModel: ListViewModel = hiltViewModel()
 ) {
 
-    val toDoList by viewModel.getToDoList(id).collectAsState(initial = null)
+    val toDoList by viewModel.toDoListFlow.collectAsState(initial = null)
 
     toDoList?.let {
         ListScreen(

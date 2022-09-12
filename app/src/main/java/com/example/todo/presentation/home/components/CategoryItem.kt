@@ -33,7 +33,7 @@ fun CategoryItem(
 ) {
     Box(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .padding(SmallPadding)
             .clip(MaterialTheme.shapes.large)
             .clickable { onListItemClick() }
