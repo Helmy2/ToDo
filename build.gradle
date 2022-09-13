@@ -5,10 +5,10 @@ buildscript {
         koin_version= '3.2.0'
         room_version= '2.4.3'
         data_store_version= '1.0.0'
-        coil_version= '2.1.0'
+        coil_version= '2.2.1'
         accompanist_version= '0.17.0'
         coroutines_version= '1.6.4'
-        lottie_version= '5.0.3'
+        lottie_version= '5.2.0'
     }
 
     dependencies {
