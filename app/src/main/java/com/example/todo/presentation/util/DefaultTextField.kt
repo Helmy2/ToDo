@@ -9,7 +9,6 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
-import com.example.todo.presentation.theme.CommonGrey
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -30,7 +29,7 @@ fun DefaultTextField(
             focusedBorderColor = Color.Transparent,
             unfocusedBorderColor = Color.Transparent,
         ),
-        placeholder = { Text(text = hint, color = CommonGrey) },
+        placeholder = { Text(text = hint, color = MaterialTheme.colorScheme.secondaryContainer) },
         modifier = modifier,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         keyboardActions = KeyboardActions(onDone = { focusManager.moveFocus(FocusDirection.Down) }),

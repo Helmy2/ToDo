@@ -15,12 +15,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.unit.dp
 import com.example.todo.domian.model.ToDoColor
 import com.example.todo.domian.model.ToDoStatus
 import com.example.todo.domian.model.ToDoTask
 import com.example.todo.domian.model.color
-import com.example.todo.presentation.theme.CommonGrey
 import com.example.todo.presentation.theme.MediumPadding
 import com.example.todo.presentation.theme.SmallPadding
 import com.example.todo.presentation.util.SwipeDismiss
@@ -84,7 +82,7 @@ fun CompleteTaskItem(
         Text(
             text = task.name,
             textDecoration = TextDecoration.LineThrough,
-            color = CommonGrey
+            color = MaterialTheme.colorScheme.onBackground
         )
     }
 }
