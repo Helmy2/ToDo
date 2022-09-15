@@ -15,17 +15,15 @@ private const val TAG = "HomeViewModel"
 class HomeViewModel @Inject constructor(
     private val repo: ToDoRepo,
 ) : ViewModel() {
-    val categoryFlow by lazy { repo.getAllToDoCategory() }
-    val toDoListFlow by lazy { repo.getAllToDoLists() }
-
+    val categoryFlow =  repo.getAllToDoCategory()
+    val toDoListFlow =  repo.getAllToDoLists()
 
     fun addToDoList(title: String, color: ToDoColor) = viewModelScope.launch {
         repo.createToDoList(title, color)
     }
 
-    fun deleteToDoList(it: ToDoList) = viewModelScope.launch {
-        repo.deleteToDoList(it.id)
+    fun deleteToDoList(id: String) = viewModelScope.launch {
+        repo.deleteToDoList(id)
     }
-
 }
 

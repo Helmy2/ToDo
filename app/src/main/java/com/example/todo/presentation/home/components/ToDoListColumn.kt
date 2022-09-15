@@ -3,40 +3,57 @@ package com.example.todo.presentation.home.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
+import androidx.compose.material.icons.filled.ArrowForwardIos
+import androidx.compose.material.icons.filled.ArrowRight
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.todo.domian.model.*
+import com.example.todo.domian.model.ToDoList
+import com.example.todo.domian.model.color
 import com.example.todo.presentation.theme.MediumPadding
 import com.example.todo.presentation.theme.SmallPadding
 import com.example.todo.presentation.util.SwipeDismiss
 
 @Composable
+fun ToDoListColumn(
+    list: List<ToDoList>,
+    onListItemClick: (String) -> Unit,
+    onDeleteItemClick: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(8.dp), modifier = modifier
+    ) {
+        items(list, key = { item -> item.id }) { toDoList ->
+            ToDoItem(
+                toDoList = toDoList,
+                onItemClick = { onListItemClick(toDoList.id) },
+                onDeleteItemClicked = { onDeleteItemClick(toDoList.id) }
+            )
+        }
+    }
+}
+
+@Composable
 fun ToDoItem(
     toDoList: ToDoList,
-    onSwipeToDelete: () -> Unit,
+    onDeleteItemClicked: () -> Unit,
     onItemClick: () -> Unit,
 ) {
-    SwipeDismiss(
-        backgroundModifier = Modifier.background(
-            MaterialTheme.colorScheme.secondary, MaterialTheme.shapes.large
-        ),
-        backgroundSecondaryModifier = Modifier.clip(
-            MaterialTheme.shapes.large
-        ),
-        onDismiss = { onSwipeToDelete() }
-    ) {
+    SwipeDismiss(onDismiss = { onDeleteItemClicked() }) {
         Box(
             modifier = Modifier
-                .padding(vertical = SmallPadding)
                 .fillMaxWidth()
                 .clip(MaterialTheme.shapes.large)
                 .background(MaterialTheme.colorScheme.secondaryContainer)

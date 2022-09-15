@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.todo.domian.model.ToDoList
 import com.example.todo.domian.model.ToDoTask
 import com.example.todo.domian.repository.ToDoRepo
+import com.example.todo.presentation.navigation.Screens
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -17,7 +18,7 @@ class ListViewModel @Inject constructor(
     private val repo: ToDoRepo,
 ) : ViewModel() {
 
-    private val listId: String = checkNotNull(savedStateHandle["id"])
+    private val listId: String = checkNotNull(savedStateHandle[Screens.ListScreen.argument0])
 
     val toDoListFlow: Flow<ToDoList> = repo.getToDoList(listId)
 

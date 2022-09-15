@@ -7,9 +7,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -20,14 +19,18 @@ import androidx.compose.ui.text.input.KeyboardType
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchView(
-    text: String,
     onTextUpdate: (text: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
+    var searchText by rememberSaveable { mutableStateOf("") }
+
     OutlinedTextField(
-        value = text,
-        onValueChange = onTextUpdate,
+        value = searchText,
+        onValueChange = {
+            searchText = it
+            onTextUpdate(it)
+        },
         singleLine = true,
         shape = RoundedCornerShape(25),
         colors = TextFieldDefaults.outlinedTextFieldColors(

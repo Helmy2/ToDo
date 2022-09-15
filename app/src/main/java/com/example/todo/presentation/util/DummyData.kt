@@ -1,19 +1,16 @@
 package com.example.todo.presentation.util
 
-import com.example.todo.domian.model.ToDoColor
-import com.example.todo.domian.model.ToDoList
-import com.example.todo.domian.model.ToDoStatus
-import com.example.todo.domian.model.ToDoTask
+import com.example.todo.domian.model.*
 
 
-fun dummyRandomList() = buildList(
-    muchList = 10,
+fun dummyList() = buildList(
+    muchList = 5,
     muchTask = 10,
 )
-
-fun dummyRandomCategory() = buildList(
-    muchList = 3,
-    muchTask = 10,
+fun dummyCategory() = listOf(
+    Category.Today(emptyList()),
+    Category.Scheduled(emptyList()),
+    Category.All(emptyList()),
 )
 
 private fun buildList(

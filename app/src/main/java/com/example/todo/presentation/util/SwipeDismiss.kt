@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 import kotlin.math.hypot
 
+
 private const val dismissFraction = 0.4f
 private const val iconShownFraction = 0.07f
 
@@ -127,16 +128,17 @@ fun SwipeDismiss(
                 }
             }
         },
-        onDismiss = onDismiss,
-        content = content
+        content = content,
+        onDismiss = onDismiss
     )
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun SwipeDismiss(
+fun SwipeDismiss(
     modifier: Modifier = Modifier,
     background: @Composable (isDismissed: Boolean, fraction: Float) -> Unit,
+    content: @Composable (isDismissed: Boolean) -> Unit,
     directions: Set<DismissDirection> = setOf(DismissDirection.EndToStart),
     enter: EnterTransition = expandVertically(),
     exit: ExitTransition = shrinkVertically(
@@ -144,8 +146,7 @@ private fun SwipeDismiss(
             durationMillis = 400,
         )
     ),
-    onDismiss: () -> Unit,
-    content: @Composable (isDismissed: Boolean) -> Unit
+    onDismiss: () -> Unit
 ) {
     val dismissState = rememberDismissState(
         confirmStateChange = {
@@ -182,7 +183,6 @@ private fun SwipeDismiss(
         )
     }
 }
-
 
 fun lerp(
     startValue: Float,

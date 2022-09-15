@@ -3,14 +3,18 @@ package com.example.todo.presentation.list.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.outlined.Circle
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,7 +29,48 @@ import com.example.todo.presentation.util.SwipeDismiss
 import com.example.todo.presentation.util.convertLongToTime
 
 @Composable
-fun TaskItem(
+fun ToDoColumn(
+    list: List<ToDoTask>,
+    taskColor: ToDoColor,
+    onSwipeToDelete: (ToDoTask) -> Unit,
+    onTaskItemClick: (ToDoTask) -> Unit,
+    onCheckItemClick: (ToDoTask) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val completedList = remember(list) {
+        list.filter { it.status == ToDoStatus.COMPLETE }
+    }
+    val inProgressList = remember(list) {
+        list.filter { it.status == ToDoStatus.IN_PROGRESS }
+    }
+    LazyColumn(modifier) {
+        items(inProgressList, key = { it.id }) {
+            ToDoItem(
+                task = it,
+                taskColor,
+                onSwipeToDelete = { onSwipeToDelete(it) },
+                onTaskItemClick = { onTaskItemClick(it) },
+                onCheckItemClick = { onCheckItemClick(it) }
+            )
+        }
+        item {
+            Divider(modifier = Modifier.padding(vertical = SmallPadding))
+            Text(text = "Done (${completedList.size})")
+        }
+        items(completedList, key = { it.id }) {
+            ToDoItem(
+                task = it,
+                taskColor,
+                onSwipeToDelete = { onSwipeToDelete(it) },
+                onTaskItemClick = { onTaskItemClick(it) },
+                onCheckItemClick = { onCheckItemClick(it) }
+            )
+        }
+    }
+}
+
+@Composable
+fun ToDoItem(
     task: ToDoTask,
     taskColor: ToDoColor,
     onSwipeToDelete: () -> Unit,
@@ -53,15 +98,15 @@ fun TaskItem(
                 }
         ) {
             if (task.status == ToDoStatus.COMPLETE)
-                CompleteTaskItem(task, taskColor, onCheckItemClick)
+                CompleteItem(task, taskColor, onCheckItemClick)
             else
-                InProgressTaskItem(task, taskColor, onCheckItemClick)
+                InProgressItem(task, taskColor, onCheckItemClick)
         }
     }
 }
 
 @Composable
-fun CompleteTaskItem(
+fun CompleteItem(
     task: ToDoTask,
     taskColor: ToDoColor,
     onCheckItemClick: () -> Unit,
@@ -88,7 +133,7 @@ fun CompleteTaskItem(
 }
 
 @Composable
-fun InProgressTaskItem(
+fun InProgressItem(
     task: ToDoTask,
     taskColor: ToDoColor,
     onCheckItemClick: () -> Unit,

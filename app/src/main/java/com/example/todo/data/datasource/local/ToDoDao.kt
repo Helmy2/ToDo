@@ -18,7 +18,7 @@ interface ToDoDao {
     @Query("SELECT * FROM ToDoListDb WHERE list_id = :id")
     fun getListById(id: String): Flow<ToDoListDbWithToDoTaskDb>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertList(data: ToDoListDb)
 
     @Query("delete from TodoListDb where list_id = :listId")
@@ -27,7 +27,7 @@ interface ToDoDao {
     @Update
     suspend fun updateList(data: ToDoListDb)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTask(data: ToDoTaskDb)
 
     @Query("delete from ToDoTaskDb where task_id = :id")
