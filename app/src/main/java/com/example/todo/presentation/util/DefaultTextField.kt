@@ -29,7 +29,7 @@ fun DefaultTextField(
             focusedBorderColor = Color.Transparent,
             unfocusedBorderColor = Color.Transparent,
         ),
-        placeholder = { Text(text = hint, color = MaterialTheme.colorScheme.secondaryContainer) },
+        placeholder = { Text(text = hint) },
         modifier = modifier,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         keyboardActions = KeyboardActions(onDone = { focusManager.moveFocus(FocusDirection.Down) }),

@@ -20,8 +20,11 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import java.util.*
 
 @Composable
-fun DateTimePikerField(currantDate: Long, onDoneClicked: (date: Long) -> Unit) {
-    val context = LocalContext.current as AppCompatActivity
+fun DateTimePikerField(
+    currantDate: Long,
+    onDoneClicked: (date: Long) -> Unit,
+    context: AppCompatActivity = LocalContext.current.activity()!!
+) {
     val calendar = Calendar.getInstance().also { it.timeInMillis = currantDate }
 
     val february = calendar.timeInMillis

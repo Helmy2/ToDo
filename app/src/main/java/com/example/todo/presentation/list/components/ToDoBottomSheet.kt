@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -54,7 +55,10 @@ fun ToDoBottomSheet(
                 hint = "Title",
                 modifier = Modifier.fillMaxWidth()
             )
-            Divider(Modifier.padding(SmallPadding))
+            Divider(
+                Modifier.padding(SmallPadding),
+                color = MaterialTheme.colorScheme.onSecondaryContainer
+            )
             DefaultTextField(
                 value = note,
                 onValueChange = { note = it },
@@ -75,7 +79,10 @@ fun ToDoBottomSheet(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                TextButton(onClick = { onSaveButtonClicked(title, note, date) }) {
+                TextButton(
+                    onClick = { onSaveButtonClicked(title, note, date) },
+                    enabled = title.isNotBlank()
+                ) {
                     Text(text = "Save")
                 }
             }

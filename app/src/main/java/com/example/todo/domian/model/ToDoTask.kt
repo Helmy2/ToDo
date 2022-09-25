@@ -10,4 +10,6 @@ data class ToDoTask(
     val note: String = "",
     val createdAt: Long,
     val updatedAt: Long,
-)
+) {
+    fun isComplete() = status == ToDoStatus.COMPLETE
+}

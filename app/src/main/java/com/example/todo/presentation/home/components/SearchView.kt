@@ -37,7 +37,6 @@ fun SearchView(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
             focusedBorderColor = Color.Transparent,
             unfocusedBorderColor = Color.Transparent,
-            cursorColor = Color.Transparent
         ),
         leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
         placeholder = { Text(text = "Search") },

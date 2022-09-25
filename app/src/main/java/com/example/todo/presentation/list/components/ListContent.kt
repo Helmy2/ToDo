@@ -17,6 +17,7 @@ import com.example.todo.domian.model.ToDoTask
 import com.example.todo.presentation.theme.MediumPadding
 import kotlinx.coroutines.launch
 
+
 @OptIn(
     ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class,
     ExperimentalComposeUiApi::class
@@ -33,10 +34,20 @@ fun ListContent(
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     val keyboard = LocalSoftwareKeyboardController.current
-    LaunchedEffect(key1 = bottomSheetState) {
+    var openDialog by remember { mutableStateOf(false) }
+    LaunchedEffect(key1 = bottomSheetState.currentValue) {
         if (bottomSheetState.currentValue == ModalBottomSheetValue.Hidden)
             keyboard?.hide()
     }
+    var currentTask: ToDoTask? by remember {
+        mutableStateOf(null)
+    }
+    TaskEditDialog(
+        isOpen = openDialog,
+        task = currentTask,
+        onSave = { openDialog = false },
+        onCancel = { openDialog = false }
+    )
 
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
@@ -46,10 +57,7 @@ fun ListContent(
                     title, note, date,
                     toDoList.id
                 )
-                coroutineScope.launch {
-                    bottomSheetState.hide()
-                    keyboard?.hide()
-                }
+                coroutineScope.launch { bottomSheetState.hide() }
             }
         },
     ) {
@@ -63,19 +71,19 @@ fun ListContent(
                 }
             }
         ) {
-            Column(
+            ToDoColumn(
+                list = toDoList.tasks,
+                taskColor = toDoList.color,
+                onSwipeToDelete = onSwipeToDelete,
+                onTaskItemClick = {
+                    currentTask = it
+                    openDialog = true
+                },
+                onCheckItemClick = onCheckItemClick,
                 modifier = Modifier
                     .padding(it)
                     .padding(horizontal = MediumPadding)
-            ) {
-                ToDoColumn(
-                    list = toDoList.tasks,
-                    taskColor = toDoList.color,
-                    onSwipeToDelete = onSwipeToDelete,
-                    onTaskItemClick = onItemClick,
-                    onCheckItemClick = onCheckItemClick
-                )
-            }
+            )
         }
     }
 }

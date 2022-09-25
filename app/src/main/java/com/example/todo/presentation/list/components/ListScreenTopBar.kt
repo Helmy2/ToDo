@@ -28,7 +28,7 @@ fun ListScreenTopBar(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = MediumPadding, vertical = LargePadding)
+            .padding(start = MediumPadding, end = MediumPadding, top = MediumPadding)
     ) {
         IconButton(onClick = onBackClicked) {
             Icon(

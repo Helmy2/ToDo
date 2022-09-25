@@ -10,7 +10,11 @@ enum class ToDoColor {
     YELLOW,
     ORANGE,
     PURPLE,
-    BROWN
+    BROWN;
+
+    fun onColor(): Color {
+        return Color.White
+    }
 }
 
 fun ToDoColor.color(): Color =

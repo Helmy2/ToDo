@@ -1,32 +1,30 @@
 package com.example.todo.presentation.list.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.outlined.Circle
-import androidx.compose.material3.Divider
-import androidx.compose.material3.Icon
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.todo.domian.model.ToDoColor
 import com.example.todo.domian.model.ToDoStatus
 import com.example.todo.domian.model.ToDoTask
 import com.example.todo.domian.model.color
-import com.example.todo.presentation.theme.MediumPadding
 import com.example.todo.presentation.theme.SmallPadding
 import com.example.todo.presentation.util.SwipeDismiss
 import com.example.todo.presentation.util.convertLongToTime
+import com.example.todo.presentation.util.getCurrentDate
 
 @Composable
 fun ToDoColumn(
@@ -43,6 +41,9 @@ fun ToDoColumn(
     val inProgressList = remember(list) {
         list.filter { it.status == ToDoStatus.IN_PROGRESS }
     }
+
+    var showDone by remember { mutableStateOf(true) }
+
     LazyColumn(modifier) {
         items(inProgressList, key = { it.id }) {
             ToDoItem(
@@ -54,17 +55,23 @@ fun ToDoColumn(
             )
         }
         item {
-            Divider(modifier = Modifier.padding(vertical = SmallPadding))
-            Text(text = "Done (${completedList.size})")
+            TextButton(onClick = { showDone = !showDone }) {
+                Text(
+                    text = "Done (${completedList.size})",
+                    textDecoration = if (showDone) TextDecoration.None else TextDecoration.LineThrough,
+                )
+            }
         }
         items(completedList, key = { it.id }) {
-            ToDoItem(
-                task = it,
-                taskColor,
-                onSwipeToDelete = { onSwipeToDelete(it) },
-                onTaskItemClick = { onTaskItemClick(it) },
-                onCheckItemClick = { onCheckItemClick(it) }
-            )
+            AnimatedVisibility(visible = showDone) {
+                ToDoItem(
+                    task = it,
+                    taskColor,
+                    onSwipeToDelete = { onSwipeToDelete(it) },
+                    onTaskItemClick = { onTaskItemClick(it) },
+                    onCheckItemClick = { onCheckItemClick(it) }
+                )
+            }
         }
     }
 }
@@ -77,97 +84,94 @@ fun ToDoItem(
     onTaskItemClick: () -> Unit,
     onCheckItemClick: () -> Unit,
 ) {
-    SwipeDismiss(
-        backgroundModifier = Modifier.background(
-            MaterialTheme.colorScheme.secondary,
-            MaterialTheme.shapes.medium
-        ),
-        backgroundSecondaryModifier = Modifier.clip(
-            MaterialTheme.shapes.medium
-        ),
-        onDismiss = { onSwipeToDelete() }
+    MaterialTheme(
+        colorScheme = MaterialTheme.colorScheme.copy(
+            primary = taskColor.color(),
+            onPrimary = taskColor.onColor()
+        )
     ) {
-        Column(
-            modifier = Modifier
-                .padding(vertical = SmallPadding)
-                .fillMaxWidth()
-                .clip(MaterialTheme.shapes.medium)
-                .background(MaterialTheme.colorScheme.secondaryContainer)
-                .clickable {
-                    onTaskItemClick()
-                }
+        SwipeDismiss(
+            backgroundModifier = Modifier.clip(
+                MaterialTheme.shapes.medium
+            ),
+            backgroundSecondaryModifier = Modifier.clip(
+                MaterialTheme.shapes.medium
+            ),
+            onDismiss = { onSwipeToDelete() }
         ) {
-            if (task.status == ToDoStatus.COMPLETE)
-                CompleteItem(task, taskColor, onCheckItemClick)
-            else
-                InProgressItem(task, taskColor, onCheckItemClick)
+            ConstraintLayout(
+                modifier = Modifier
+                    .padding(SmallPadding)
+                    .fillMaxWidth()
+                    .clip(MaterialTheme.shapes.medium)
+                    .background(MaterialTheme.colorScheme.secondaryContainer)
+                    .clickable { onTaskItemClick() }
+                    .padding(SmallPadding),
+            ) {
+
+                val (titleText, dueDateText, doneCheckbox) = createRefs()
+
+                Checkbox(
+                    checked = task.isComplete(),
+                    onCheckedChange = { onCheckItemClick() },
+                    modifier = Modifier.constrainAs(doneCheckbox) {
+                        top.linkTo(parent.top)
+                    },
+                )
+                Text(
+                    text = task.name,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier.constrainAs(titleText) {
+                        top.linkTo(doneCheckbox.top)
+                        bottom.linkTo(doneCheckbox.bottom)
+                        start.linkTo(doneCheckbox.end, margin = SmallPadding)
+                    }
+                )
+                if (task.dueDate != null && !task.isComplete())
+                    Text(
+                        text = task.dueDate.convertLongToTime(),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier
+                            .clip(MaterialTheme.shapes.small)
+                            .background(MaterialTheme.colorScheme.primary)
+                            .padding(SmallPadding)
+                            .constrainAs(dueDateText) {
+                                top.linkTo(titleText.bottom, margin = SmallPadding)
+                                start.linkTo(titleText.start)
+                            }
+                    )
+            }
         }
     }
 }
 
+@Preview
 @Composable
-fun CompleteItem(
-    task: ToDoTask,
-    taskColor: ToDoColor,
-    onCheckItemClick: () -> Unit,
-) {
-    Row(
-        modifier = Modifier.padding(SmallPadding),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            tint = taskColor.color().copy(alpha = .3f),
-            imageVector = Icons.Default.Check,
-            contentDescription = Icons.Default.Check.name,
-            modifier = Modifier
-                .clip(CircleShape)
-                .clickable { onCheckItemClick() }
-        )
-        Spacer(modifier = Modifier.width(MediumPadding))
-        Text(
-            text = task.name,
-            textDecoration = TextDecoration.LineThrough,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-    }
+fun ItemPrev1() {
+    ToDoItem(
+        task = ToDoTask(
+            name = "Title",
+            createdAt = getCurrentDate(),
+            updatedAt = getCurrentDate(),
+            status = ToDoStatus.COMPLETE
+        ),
+        taskColor = ToDoColor.BLUE,
+        onSwipeToDelete = { },
+        onTaskItemClick = { }) {}
 }
 
+@Preview
 @Composable
-fun InProgressItem(
-    task: ToDoTask,
-    taskColor: ToDoColor,
-    onCheckItemClick: () -> Unit,
-) {
-    Row(
-        modifier = Modifier.padding(SmallPadding),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            tint = taskColor.color()
-                .copy(alpha = .3f),
-            imageVector = Icons.Outlined.Circle,
-            contentDescription = Icons.Outlined.Circle.name,
-            modifier = Modifier
-                .clip(CircleShape)
-                .clickable { onCheckItemClick() }
-        )
-        Spacer(modifier = Modifier.width(MediumPadding))
-        Text(
-            text = task.name,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-    }
-    Box(
-        modifier = Modifier
-            .padding(SmallPadding)
-            .clip(MaterialTheme.shapes.large)
-            .background(MaterialTheme.colorScheme.primary)
-    ) {
-        Text(
-            text = task.createdAt.convertLongToTime(),
-            color = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier
-                .padding(SmallPadding)
-        )
-    }
+fun ItemPrev2() {
+    ToDoItem(
+        task = ToDoTask(
+            name = "Title",
+            createdAt = getCurrentDate(),
+            updatedAt = getCurrentDate(),
+            dueDate = getCurrentDate()
+        ),
+        taskColor = ToDoColor.BLUE,
+        onSwipeToDelete = { },
+        onTaskItemClick = { }) {}
 }
