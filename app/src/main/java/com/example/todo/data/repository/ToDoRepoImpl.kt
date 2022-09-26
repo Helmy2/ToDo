@@ -9,7 +9,6 @@ import com.example.todo.domian.model.*
 import com.example.todo.domian.repository.ToDoRepo
 import com.example.todo.presentation.util.getCurrentDate
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import java.util.*

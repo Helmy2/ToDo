@@ -19,10 +19,9 @@ fun ListScreen(
     toDoList?.let {
         ListContent(
             toDoList = it,
-            onItemClick = {},
-            onSwipeToDelete = {
-                viewModel.deleteToDoTask(it.id)
-            },
+            onUpdateToDoTaskClick = { viewModel.updateToDoTask(it) },
+            onUpdateToDoListClick = {viewModel.updateToDoList(it)},
+            onSwipeToDelete = { viewModel.deleteToDoTask(it.id) },
             onBackClicked = { controller.popBackStack() },
             onCheckItemClick = {
                 viewModel.updateToDoTask(

@@ -25,7 +25,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun ListContent(
     toDoList: ToDoList,
-    onItemClick: (ToDoTask) -> Unit,
+    onUpdateToDoTaskClick: (ToDoTask) -> Unit,
+    onUpdateToDoListClick: (ToDoList) -> Unit,
     onSwipeToDelete: (ToDoTask) -> Unit,
     onCheckItemClick: (ToDoTask) -> Unit,
     onAddToDoItemClick: (title: String, note: String, dueDate: Long?, listId: String) -> Unit,
@@ -34,20 +35,39 @@ fun ListContent(
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     val keyboard = LocalSoftwareKeyboardController.current
-    var openDialog by remember { mutableStateOf(false) }
+    var currentTask: ToDoTask? by remember { mutableStateOf(null) }
+    var showListDialog by remember { mutableStateOf(false) }
+
     LaunchedEffect(key1 = bottomSheetState.currentValue) {
         if (bottomSheetState.currentValue == ModalBottomSheetValue.Hidden)
             keyboard?.hide()
     }
-    var currentTask: ToDoTask? by remember {
-        mutableStateOf(null)
+
+    currentTask?.let {
+        TaskEditDialog(
+            task = it,
+            onSave = { editToDoTask ->
+                currentTask = null
+                onUpdateToDoTaskClick(editToDoTask)
+            },
+            onCancel = {
+                currentTask = null
+            }
+        )
     }
-    TaskEditDialog(
-        isOpen = openDialog,
-        task = currentTask,
-        onSave = { openDialog = false },
-        onCancel = { openDialog = false }
-    )
+
+    if (showListDialog) {
+        ListEditDialog(
+            toDoList = toDoList,
+            onSave = { editToDoList ->
+                showListDialog = false
+                onUpdateToDoListClick(editToDoList)
+            },
+            onCancel = {
+                showListDialog = false
+            }
+        )
+    }
 
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
@@ -62,7 +82,11 @@ fun ListContent(
         },
     ) {
         Scaffold(
-            topBar = { ListScreenTopBar(onBackClicked, toDoList) },
+            topBar = {
+                ListScreenTopBar(toDoList, onBackClicked) {
+                    showListDialog = true
+                }
+            },
             floatingActionButton = {
                 FloatingActionButton(onClick = {
                     coroutineScope.launch { bottomSheetState.show() }
@@ -75,9 +99,8 @@ fun ListContent(
                 list = toDoList.tasks,
                 taskColor = toDoList.color,
                 onSwipeToDelete = onSwipeToDelete,
-                onTaskItemClick = {
-                    currentTask = it
-                    openDialog = true
+                onTaskItemClick = { toToTask ->
+                    currentTask = toToTask
                 },
                 onCheckItemClick = onCheckItemClick,
                 modifier = Modifier
@@ -87,4 +110,6 @@ fun ListContent(
         }
     }
 }
+
+
 

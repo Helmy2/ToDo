@@ -38,4 +38,10 @@ class ListViewModel @Inject constructor(
             repo.deleteToDoTask(id)
         }
     }
+
+    fun updateToDoList(toDoList: ToDoList) {
+        viewModelScope.launch {
+            repo.updateToDoList(toDoList)
+        }
+    }
 }
