@@ -1,12 +1,15 @@
 package com.example.todo.presentation.util
 
+import com.example.todo.data.wrapper.DateTimeProviderImpl
 import com.example.todo.domian.model.*
+import java.time.LocalDateTime
 
 
 fun dummyList() = buildList(
     muchList = 5,
     muchTask = 10,
 )
+
 fun dummyCategory() = listOf(
     Category.Today(emptyList()),
     Category.Scheduled(emptyList()),
@@ -17,28 +20,30 @@ private fun buildList(
     muchList: Int,
     muchTask: Int,
 ): List<ToDoList> {
+    val now = DateTimeProviderImpl().now()
     return build(muchList) {
         ToDoList(
             id = "List$it",
             name = "List$it",
             color = ToDoColor.values().random(),
-            tasks = buildTask(muchTask),
-            createdAt = getCurrentDate(),
-            updatedAt = getCurrentDate()
+            tasks = buildTask(muchTask, now),
+            createdAt = now,
+            updatedAt = now
         )
     }
 }
 
 private fun buildTask(
     muchTask: Int,
+    now: LocalDateTime,
 ): List<ToDoTask> {
     return build(muchTask) {
         ToDoTask(
             id = "$it",
             name = "Task$it",
             status = ToDoStatus.values().random(),
-            createdAt = getCurrentDate(),
-            updatedAt = getCurrentDate()
+            createdAt = now,
+            updatedAt = now
         )
     }
 }

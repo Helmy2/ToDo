@@ -16,11 +16,11 @@ fun ListScreen(
 
     val toDoList by viewModel.toDoListFlow.collectAsState(initial = null)
 
-    toDoList?.let {
+    toDoList?.let { list ->
         ListContent(
-            toDoList = it,
-            onUpdateToDoTaskClick = { viewModel.updateToDoTask(it) },
-            onUpdateToDoListClick = {viewModel.updateToDoList(it)},
+            toDoList = list,
+            onUpdateToDoTaskClick = { viewModel.updateToDoTask(it, listId = list.id) },
+            onUpdateToDoListClick = { viewModel.updateToDoList(it) },
             onSwipeToDelete = { viewModel.deleteToDoTask(it.id) },
             onBackClicked = { controller.popBackStack() },
             onCheckItemClick = {
@@ -28,11 +28,12 @@ fun ListScreen(
                     task = it.copy(
                         status = if (it.status == ToDoStatus.COMPLETE)
                             ToDoStatus.IN_PROGRESS else ToDoStatus.COMPLETE
-                    )
+                    ),
+                    listId = list.id
                 )
             },
-            onAddToDoItemClick = { title, note, duDate, listId ->
-                viewModel.addToDoTask(title, note, duDate, listId)
+            onAddToDoItemClick = { task, listId ->
+                viewModel.addToDoTask(task, listId)
             }
         )
     }

@@ -16,17 +16,7 @@ interface LocalManager {
     suspend fun updateList(data: ToDoListDb)
     suspend fun insertTask(toDoTaskDb: ToDoTaskDb)
     suspend fun deleteTask(id: String)
-    suspend fun updateTask(
-        id: String,
-        name: String,
-        status: ToDoStatus,
-        completedAt: Long?,
-        dueDate: Long?,
-        isDueDateTimeSet: Boolean,
-        note: String,
-        createdAt: Long,
-        updatedAt: Long,
-    )
+    suspend fun updateTask(task: ToDoTaskDb)
 
     fun getAllTasks(): Flow<List<ToDoTaskDb>>
     fun getToDayTasks(): Flow<List<ToDoTaskDb>>

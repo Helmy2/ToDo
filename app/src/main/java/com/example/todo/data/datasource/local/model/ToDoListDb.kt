@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.todo.domian.model.ToDoColor
+import java.time.LocalDateTime
 
 @Entity
 data class ToDoListDb(
@@ -15,8 +16,8 @@ data class ToDoListDb(
     @ColumnInfo(name = "list_color")
     val color: ToDoColor,
     @ColumnInfo(name = "list_created_at")
-    val createdAt: Long,
+    val createdAt: LocalDateTime?,
     @ColumnInfo(name = "list_updated_at")
-    val updatedAt: Long,
+    val updatedAt: LocalDateTime?,
 )
 

@@ -3,6 +3,7 @@ package com.example.todo.data.datasource.local.model
 import androidx.room.*
 import androidx.room.ForeignKey.CASCADE
 import com.example.todo.domian.model.ToDoStatus
+import java.time.LocalDateTime
 
 @Entity(
     foreignKeys = [
@@ -28,15 +29,13 @@ data class ToDoTaskDb(
     @ColumnInfo(name = "task_status")
     val status: ToDoStatus,
     @ColumnInfo(name = "task_due_date")
-    val dueDate: Long?,
+    val dueDate: LocalDateTime?,
     @ColumnInfo(name = "task_completed_at")
-    val completedAt: Long?,
-    @ColumnInfo(name = "task_is_due_date_time_set")
-    val isDueDateTimeSet: Boolean,
+    val completedAt: LocalDateTime?,
     @ColumnInfo(name = "task_note", defaultValue = "")
     val note: String = "",
     @ColumnInfo(name = "task_created_at")
-    val createdAt: Long,
+    val createdAt: LocalDateTime?,
     @ColumnInfo(name = "task_updated_at")
-    val updatedAt: Long,
+    val updatedAt: LocalDateTime?,
 )

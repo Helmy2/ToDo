@@ -10,25 +10,25 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.todo.domian.model.ToDoTask
 import com.example.todo.presentation.theme.MediumPadding
 import com.example.todo.presentation.theme.SmallPadding
 import com.example.todo.presentation.theme.ToDoTheme
 import com.example.todo.presentation.util.DateTimePikerField
 import com.example.todo.presentation.util.DefaultTextField
-import com.example.todo.presentation.util.getCurrentDate
+import java.time.LocalDateTime
 
 @Composable
 fun ToDoBottomSheet(
-    onSaveButtonClicked: (title: String, note: String, date: Long?) -> Unit
+    onSaveButtonClicked: (task: ToDoTask) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     var title by remember { mutableStateOf("") }
     var note by remember { mutableStateOf("") }
-    var date by remember { mutableStateOf<Long?>(null) }
+    var date: LocalDateTime? by remember { mutableStateOf(null) }
 
     Column(
         modifier = Modifier
@@ -71,7 +71,7 @@ fun ToDoBottomSheet(
         }
         Row {
             DateTimePikerField(
-                currantDate = getCurrentDate(),
+                currantDate = date,
                 onDoneClicked = { date = it },
             )
             Row(
@@ -80,7 +80,15 @@ fun ToDoBottomSheet(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 TextButton(
-                    onClick = { onSaveButtonClicked(title, note, date) },
+                    onClick = {
+                        onSaveButtonClicked(
+                            ToDoTask(
+                                name = title,
+                                dueDate = date,
+                                note = note,
+                            )
+                        )
+                    },
                     enabled = title.isNotBlank()
                 ) {
                     Text(text = "Save")
@@ -94,6 +102,6 @@ fun ToDoBottomSheet(
 @Composable
 fun BottomSheetPreview() {
     ToDoTheme {
-        ToDoBottomSheet(onSaveButtonClicked = { _, _, _ -> })
+        ToDoBottomSheet(onSaveButtonClicked = {})
     }
 }

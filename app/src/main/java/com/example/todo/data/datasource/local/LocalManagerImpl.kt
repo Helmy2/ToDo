@@ -1,20 +1,15 @@
 package com.example.todo.data.datasource.local
 
-import android.util.Log
 import com.example.todo.data.datasource.local.extension.toToDoList
 import com.example.todo.data.datasource.local.model.ToDoListDb
 import com.example.todo.data.datasource.local.model.ToDoTaskDb
 import com.example.todo.domian.model.ToDoList
-import com.example.todo.domian.model.ToDoStatus
-import com.example.todo.presentation.util.convertLongToTime
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import java.time.LocalDate
 import java.util.*
 import javax.inject.Inject
 
@@ -62,29 +57,9 @@ class LocalManagerImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateTask(
-        id: String,
-        name: String,
-        status: ToDoStatus,
-        completedAt: Long?,
-        dueDate: Long?,
-        isDueDateTimeSet: Boolean,
-        note: String,
-        createdAt: Long,
-        updatedAt: Long,
-    ) {
+    override suspend fun updateTask(task: ToDoTaskDb) {
         withContext(dispatcher) {
-            toDoDao.updateTask(
-                id,
-                name,
-                status,
-                completedAt,
-                dueDate,
-                isDueDateTimeSet,
-                note,
-                createdAt,
-                updatedAt
-            )
+            toDoDao.updateTask(task)
         }
     }
 
@@ -93,7 +68,7 @@ class LocalManagerImpl @Inject constructor(
     }
 
     override fun getToDayTasks(): Flow<List<ToDoTaskDb>> {
-        return toDoDao.getTasksFromTo(startOfDay(),endOfDay())
+        return toDoDao.getTasksFromTo(startOfDay(), endOfDay())
     }
 
     override fun getScheduledTasks(): Flow<List<ToDoTaskDb>> {

@@ -9,28 +9,42 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.todo.presentation.theme.ToDoTheme
+import com.example.todo.util.toLocalDateTime
+import com.example.todo.util.toMillis
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
+import java.time.LocalDateTime
+import java.time.temporal.TemporalField
 import java.util.*
 
 @Composable
 fun DateTimePikerField(
-    currantDate: Long,
-    onDoneClicked: (date: Long) -> Unit,
+    currantDate: LocalDateTime?,
+    onDoneClicked: (date: LocalDateTime) -> Unit,
     context: AppCompatActivity = LocalContext.current.activity()!!
 ) {
-    val calendar = Calendar.getInstance().also { it.timeInMillis = currantDate }
+    val calendar by remember {
+        mutableStateOf(
+            Calendar.getInstance().also { c ->
+                currantDate?.let {
+                    c.timeInMillis = it.toMillis()
+                }
+            }
+        )
+    }
 
-    val february = calendar.timeInMillis
     val constraintsBuilder =
         CalendarConstraints.Builder()
-            .setOpenAt(february)
+            .setOpenAt(calendar.timeInMillis)
             .build()
 
     val timePicker =
@@ -55,7 +69,7 @@ fun DateTimePikerField(
         calendar[Calendar.HOUR_OF_DAY] = timePicker.hour
         calendar[Calendar.MINUTE] = timePicker.minute
 
-        onDoneClicked(calendar.timeInMillis)
+        onDoneClicked(calendar.timeInMillis.toLocalDateTime())
     }
 
     IconButton(
@@ -79,7 +93,7 @@ fun DateTimePikerField(
 fun DateTimePikerFieldPreview() {
     ToDoTheme {
         DateTimePikerField(
-            onDoneClicked = {}, currantDate = getCurrentDate()
+            onDoneClicked = {}, currantDate = LocalDateTime.now()
         )
     }
 }

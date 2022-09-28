@@ -3,11 +3,12 @@ package com.example.todo.data.repository
 import com.example.todo.data.datasource.local.LocalManager
 import com.example.todo.data.datasource.local.extension.toToDoListDb
 import com.example.todo.data.datasource.local.extension.toToDoTask
+import com.example.todo.data.datasource.local.extension.toToDoTaskDb
 import com.example.todo.data.datasource.local.model.ToDoListDb
-import com.example.todo.data.datasource.local.model.ToDoTaskDb
+import com.example.todo.data.wrapper.DateTimeProvider
+import com.example.todo.data.wrapper.IdProvider
 import com.example.todo.domian.model.*
 import com.example.todo.domian.repository.ToDoRepo
-import com.example.todo.presentation.util.getCurrentDate
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
@@ -15,18 +16,17 @@ import java.util.*
 import javax.inject.Inject
 
 class ToDoRepoImpl @Inject constructor(
-    private val localManager: LocalManager
+    private val localManager: LocalManager,
+    private val dateTimeProvider: DateTimeProvider,
+    private val idProvider: IdProvider
 ) : ToDoRepo {
 
-    override suspend fun createToDoList(title: String, color: ToDoColor) {
+    override suspend fun createToDoList(toDoList: ToDoList) {
         localManager.insertList(
-            ToDoListDb(
-                id = UUID.randomUUID().toString(),
-                name = title,
-                color = color,
-                createdAt = getCurrentDate(),
-                updatedAt = getCurrentDate()
-            )
+            toDoList.copy(
+                createdAt = dateTimeProvider.now(),
+                updatedAt = dateTimeProvider.now()
+            ).toToDoListDb()
         )
     }
 
@@ -65,38 +65,20 @@ class ToDoRepoImpl @Inject constructor(
     }
 
     override suspend fun createToDoTask(
-        name: String,
-        note: String,
-        duDate: Long?,
+        task: ToDoTask,
         listId: String
     ) {
         localManager.insertTask(
-            ToDoTaskDb(
-                id = UUID.randomUUID().toString(),
-                listId = listId,
-                name = name,
-                note = note,
-                status = ToDoStatus.IN_PROGRESS,
-                dueDate = duDate,
-                createdAt = getCurrentDate(),
-                updatedAt = getCurrentDate(),
-                isDueDateTimeSet = duDate != null,
-                completedAt = null
-            )
+            task.copy(
+                id = idProvider.generate(), createdAt = dateTimeProvider.now(),
+                updatedAt = dateTimeProvider.now(),
+            ).toToDoTaskDb(listId)
         )
     }
 
-    override suspend fun updateToDoTask(toDoTask: ToDoTask) {
+    override suspend fun updateToDoTask(toDoTask: ToDoTask, listId: String) {
         localManager.updateTask(
-            id = toDoTask.id,
-            name = toDoTask.name,
-            note = toDoTask.note,
-            status = toDoTask.status,
-            dueDate = toDoTask.dueDate,
-            createdAt = toDoTask.createdAt,
-            updatedAt = getCurrentDate(),
-            isDueDateTimeSet = toDoTask.isDueDateTimeSet,
-            completedAt = toDoTask.completedAt
+            toDoTask.copy(updatedAt = dateTimeProvider.now()).toToDoTaskDb(listId)
         )
     }
 

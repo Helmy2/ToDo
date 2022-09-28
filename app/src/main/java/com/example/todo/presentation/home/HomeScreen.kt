@@ -22,8 +22,8 @@ fun HomeScreen(
         lists = lists,
         categories = categories,
         onDrawerClicked = {},
-        onAddListClicked = { title, color ->
-            viewModel.addToDoList(title, color)
+        onAddListClicked = { toDoList ->
+            viewModel.addToDoList(toDoList)
         },
         onListItemClick = {
             controller.navigate(Screens.ListScreen.navRuteWithArgument(it))

@@ -17,7 +17,6 @@ import com.example.todo.domian.model.ToDoTask
 import com.example.todo.presentation.theme.SmallPadding
 import com.example.todo.presentation.util.DateTimePikerField
 import com.example.todo.presentation.util.DefaultTextField
-import com.example.todo.presentation.util.getCurrentDate
 
 @Composable
 fun TaskEditDialog(
@@ -62,7 +61,7 @@ fun TaskEditDialog(
                     .background(MaterialTheme.colorScheme.secondaryContainer)
             )
             DateTimePikerField(
-                currantDate = getCurrentDate(),
+                currantDate = date,
                 onDoneClicked = { date = it },
             )
             Row(

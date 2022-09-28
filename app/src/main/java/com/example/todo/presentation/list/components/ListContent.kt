@@ -29,7 +29,7 @@ fun ListContent(
     onUpdateToDoListClick: (ToDoList) -> Unit,
     onSwipeToDelete: (ToDoTask) -> Unit,
     onCheckItemClick: (ToDoTask) -> Unit,
-    onAddToDoItemClick: (title: String, note: String, dueDate: Long?, listId: String) -> Unit,
+    onAddToDoItemClick: (task: ToDoTask, listId: String) -> Unit,
     onBackClicked: () -> Unit,
 ) {
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
@@ -72,11 +72,8 @@ fun ListContent(
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
         sheetContent = {
-            ToDoBottomSheet { title, note, date ->
-                onAddToDoItemClick(
-                    title, note, date,
-                    toDoList.id
-                )
+            ToDoBottomSheet { task ->
+                onAddToDoItemClick(task, toDoList.id)
                 coroutineScope.launch { bottomSheetState.hide() }
             }
         },

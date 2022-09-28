@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.todo.domian.model.ToDoColor
+import com.example.todo.domian.model.ToDoList
 import com.example.todo.domian.model.color
 import com.example.todo.presentation.theme.MediumPadding
 import com.example.todo.presentation.theme.SmallPadding
@@ -25,7 +26,7 @@ import com.example.todo.presentation.util.DefaultTextField
 @Composable
 fun ListBottomSheet(
     toDoColor: ToDoColor,
-    onSaveButtonClicked: (title: String, color: ToDoColor) -> Unit
+    onSaveButtonClicked: (ToDoList) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     var title by remember { mutableStateOf("") }
@@ -76,7 +77,12 @@ fun ListBottomSheet(
                 .background(color.color())
                 .clickable { showColorDialog = true }
                 .padding(MediumPadding))
-            TextButton(onClick = { onSaveButtonClicked(title, color) }, enabled = valid) {
+            TextButton(
+                onClick = {
+                    onSaveButtonClicked(ToDoList(color = color, name = title))
+                },
+                enabled = valid
+            ) {
                 Text(text = "Save")
             }
         }
@@ -87,6 +93,6 @@ fun ListBottomSheet(
 @Composable
 fun BottomSheetPreview() {
     ToDoTheme {
-        ListBottomSheet(toDoColor = ToDoColor.BLUE, onSaveButtonClicked = { _, _ -> })
+        ListBottomSheet(toDoColor = ToDoColor.BLUE, onSaveButtonClicked = { })
     }
 }

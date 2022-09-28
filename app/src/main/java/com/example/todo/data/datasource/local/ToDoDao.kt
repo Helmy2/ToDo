@@ -33,29 +33,8 @@ interface ToDoDao {
     @Query("delete from ToDoTaskDb where task_id = :id")
     suspend fun deleteTask(id: String)
 
-    @Query(
-        "update ToDoTaskDb set" +
-                " task_name=:name," +
-                " task_status=:status," +
-                " task_due_date=:dueDate," +
-                " task_completed_at=:completedAt, " +
-                " task_is_due_date_time_set=:isDueDateTimeSet, " +
-                " task_note=:note, " +
-                " task_created_at=:createdAt, " +
-                " task_updated_at=:updatedAt " +
-                "where task_id =:id"
-    )
-    suspend fun updateTask(
-        id: String,
-        name: String,
-        status: ToDoStatus,
-        completedAt: Long?,
-        dueDate: Long?,
-        isDueDateTimeSet: Boolean,
-        note: String,
-        createdAt: Long,
-        updatedAt: Long,
-    )
+    @Update
+    suspend fun updateTask(toDoTaskDb: ToDoTaskDb)
 
     @Query("select * from ToDoTaskDb")
     fun getAllTasks(): Flow<List<ToDoTaskDb>>

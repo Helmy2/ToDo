@@ -22,14 +22,14 @@ class ListViewModel @Inject constructor(
 
     val toDoListFlow: Flow<ToDoList> = repo.getToDoList(listId)
 
-    fun addToDoTask(title: String, note: String, duDate: Long?, listId: String) =
+    fun addToDoTask(task: ToDoTask, listId: String) =
         viewModelScope.launch {
-            repo.createToDoTask(title, note, duDate, listId)
+            repo.createToDoTask(task, listId)
         }
 
-    fun updateToDoTask(task: ToDoTask) {
+    fun updateToDoTask(task: ToDoTask, listId: String) {
         viewModelScope.launch {
-            repo.updateToDoTask(task)
+            repo.updateToDoTask(task, listId)
         }
     }
 

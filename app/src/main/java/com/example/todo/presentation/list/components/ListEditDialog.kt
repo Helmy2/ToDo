@@ -35,7 +35,6 @@ fun ListEditDialog(
     var showColorDialog by remember { mutableStateOf(false) }
 
     Dialog(onDismissRequest = onCancel) {
-
         if (showColorDialog)
             Dialog(onDismissRequest = { showColorDialog = false }) {
                 ColorPickerField(

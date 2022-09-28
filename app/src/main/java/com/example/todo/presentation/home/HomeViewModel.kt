@@ -18,8 +18,8 @@ class HomeViewModel @Inject constructor(
     val categoryFlow =  repo.getAllToDoCategory()
     val toDoListFlow =  repo.getAllToDoLists()
 
-    fun addToDoList(title: String, color: ToDoColor) = viewModelScope.launch {
-        repo.createToDoList(title, color)
+    fun addToDoList(toDoList: ToDoList) = viewModelScope.launch {
+        repo.createToDoList(toDoList)
     }
 
     fun deleteToDoList(id: String) = viewModelScope.launch {

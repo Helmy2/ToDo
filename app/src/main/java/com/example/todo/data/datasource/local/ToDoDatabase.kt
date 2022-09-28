@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.example.todo.data.datasource.local.model.ToDoListDb
 import com.example.todo.data.datasource.local.model.ToDoTaskDb
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -16,6 +17,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
     version = 1,
     exportSchema = false
 )
+@TypeConverters(DateConverter::class)
 abstract class ToDoDatabase : RoomDatabase() {
     abstract fun toDoDao(): ToDoDao
 

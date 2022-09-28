@@ -23,8 +23,8 @@ import com.example.todo.domian.model.ToDoTask
 import com.example.todo.domian.model.color
 import com.example.todo.presentation.theme.SmallPadding
 import com.example.todo.presentation.util.SwipeDismiss
-import com.example.todo.presentation.util.convertLongToTime
-import com.example.todo.presentation.util.getCurrentDate
+import com.example.todo.util.formatDateTime
+import java.time.LocalDateTime
 
 @Composable
 fun ToDoColumn(
@@ -127,9 +127,9 @@ fun ToDoItem(
                         start.linkTo(doneCheckbox.end, margin = SmallPadding)
                     }
                 )
-                if (task.dueDate != null && !task.isComplete())
+                if (task.isDueDateTimeSet() && !task.isComplete())
                     Text(
-                        text = task.dueDate.convertLongToTime(),
+                        text = task.dueDate?.formatDateTime() ?: "",
                         color = MaterialTheme.colorScheme.onPrimary,
                         style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier
@@ -152,8 +152,8 @@ fun ItemPrev1() {
     ToDoItem(
         task = ToDoTask(
             name = "Title",
-            createdAt = getCurrentDate(),
-            updatedAt = getCurrentDate(),
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now(),
             status = ToDoStatus.COMPLETE
         ),
         taskColor = ToDoColor.BLUE,
@@ -167,9 +167,9 @@ fun ItemPrev2() {
     ToDoItem(
         task = ToDoTask(
             name = "Title",
-            createdAt = getCurrentDate(),
-            updatedAt = getCurrentDate(),
-            dueDate = getCurrentDate()
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now(),
+            dueDate = LocalDateTime.now()
         ),
         taskColor = ToDoColor.BLUE,
         onSwipeToDelete = { },

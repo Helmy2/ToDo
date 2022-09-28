@@ -37,7 +37,7 @@ fun HomeContent(
     lists: List<ToDoList>,
     categories: List<Category>,
     onDrawerClicked: () -> Unit,
-    onAddListClicked: (title: String, color: ToDoColor) -> Unit,
+    onAddListClicked: (ToDoList) -> Unit,
     onSearchClick: (String) -> Unit,
     onListItemClick: (String) -> Unit,
     onCategoryItemClick: (Category) -> Unit,
@@ -54,8 +54,8 @@ fun HomeContent(
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
         sheetContent = {
-            ListBottomSheet(ToDoColor.BLUE) { title, color ->
-                onAddListClicked(title, color)
+            ListBottomSheet(ToDoColor.BLUE) { toDoList ->
+                onAddListClicked(toDoList)
                 coroutineScope.launch {
                     bottomSheetState.hide()
                 }
@@ -116,7 +116,7 @@ fun HomeContextPrev() {
             lists = dummyList(),
             categories = dummyCategory(),
             onDrawerClicked = { },
-            onAddListClicked = { _, _ -> },
+            onAddListClicked = { _ -> },
             onSearchClick = {},
             onListItemClick = {},
             onCategoryItemClick = {},
