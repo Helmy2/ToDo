@@ -1,26 +1,21 @@
 package com.example.todo.presentation.list.components
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import com.example.todo.domian.model.ToDoList
 import com.example.todo.domian.model.ToDoTask
 import com.example.todo.presentation.theme.MediumPadding
-import kotlinx.coroutines.launch
 
 
 @OptIn(
-    ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class,
-    ExperimentalComposeUiApi::class
+    ExperimentalMaterial3Api::class,
 )
 @Composable
 fun ListContent(
@@ -32,16 +27,9 @@ fun ListContent(
     onAddToDoItemClick: (task: ToDoTask, listId: String) -> Unit,
     onBackClicked: () -> Unit,
 ) {
-    val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-    val coroutineScope = rememberCoroutineScope()
-    val keyboard = LocalSoftwareKeyboardController.current
     var currentTask: ToDoTask? by remember { mutableStateOf(null) }
     var showListDialog by remember { mutableStateOf(false) }
-
-    LaunchedEffect(key1 = bottomSheetState.currentValue) {
-        if (bottomSheetState.currentValue == ModalBottomSheetValue.Hidden)
-            keyboard?.hide()
-    }
+    var showTaskDialog by remember { mutableStateOf(false) }
 
     currentTask?.let {
         TaskEditDialog(
@@ -68,45 +56,44 @@ fun ListContent(
             }
         )
     }
-
-    ModalBottomSheetLayout(
-        sheetState = bottomSheetState,
-        sheetContent = {
-            ToDoBottomSheet { task ->
+    if (showTaskDialog)
+        TaskDialog(
+            onCancel = { showTaskDialog = false },
+            onSave = { task ->
                 onAddToDoItemClick(task, toDoList.id)
-                coroutineScope.launch { bottomSheetState.hide() }
+                showTaskDialog = false
+            }
+        )
+
+    Scaffold(
+        topBar = {
+            ListScreenTopBar(toDoList, onBackClicked) {
+                showListDialog = true
             }
         },
-    ) {
-        Scaffold(
-            topBar = {
-                ListScreenTopBar(toDoList, onBackClicked) {
-                    showListDialog = true
-                }
-            },
-            floatingActionButton = {
-                FloatingActionButton(onClick = {
-                    coroutineScope.launch { bottomSheetState.show() }
-                }) {
-                    Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
-                }
+        floatingActionButton = {
+            FloatingActionButton(onClick = {
+                showTaskDialog = true
+            }) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
             }
-        ) {
-            ToDoColumn(
-                list = toDoList.tasks,
-                taskColor = toDoList.color,
-                onSwipeToDelete = onSwipeToDelete,
-                onTaskItemClick = { toToTask ->
-                    currentTask = toToTask
-                },
-                onCheckItemClick = onCheckItemClick,
-                modifier = Modifier
-                    .padding(it)
-                    .padding(horizontal = MediumPadding)
-            )
         }
+    ) {
+        ToDoColumn(
+            list = toDoList.tasks,
+            taskColor = toDoList.color,
+            onSwipeToDelete = onSwipeToDelete,
+            onTaskItemClick = { toToTask ->
+                currentTask = toToTask
+            },
+            onCheckItemClick = onCheckItemClick,
+            modifier = Modifier
+                .padding(it)
+                .padding(horizontal = MediumPadding)
+        )
     }
 }
+
 
 
 

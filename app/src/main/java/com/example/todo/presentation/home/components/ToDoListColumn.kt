@@ -51,7 +51,15 @@ fun ToDoItem(
     onDeleteItemClicked: () -> Unit,
     onItemClick: () -> Unit,
 ) {
-    SwipeDismiss(onDismiss = { onDeleteItemClicked() }) {
+    SwipeDismiss(
+        onDismiss = { onDeleteItemClicked() },
+        backgroundModifier = Modifier.clip(
+            MaterialTheme.shapes.medium
+        ),
+        backgroundSecondaryModifier = Modifier.clip(
+            MaterialTheme.shapes.medium
+        ),
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()

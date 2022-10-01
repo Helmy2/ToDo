@@ -14,8 +14,10 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.todo.domian.model.ToDoTask
+import com.example.todo.presentation.theme.LargePadding
 import com.example.todo.presentation.theme.SmallPadding
 import com.example.todo.presentation.util.DateTimePikerField
+import com.example.todo.presentation.util.DefaultDialog
 import com.example.todo.presentation.util.DefaultTextField
 
 @Composable
@@ -30,16 +32,17 @@ fun TaskEditDialog(
     var title by remember { mutableStateOf(task.name) }
     var note by remember { mutableStateOf(task.note) }
 
-    Dialog(onDismissRequest = onCancel) {
+
+    var valid by remember { mutableStateOf(true) }
+
+    LaunchedEffect(key1 = title, block = {
+        valid = title.isNotBlank()
+    })
+
+    DefaultDialog(onDismissRequest = onCancel) {
         Column(
             modifier = modifier
-                .background(MaterialTheme.colorScheme.background)
-                .border(
-                    width = 2.dp,
-                    color = MaterialTheme.colorScheme.secondaryContainer,
-                    MaterialTheme.shapes.extraLarge
-                )
-                .padding(16.dp),
+                .padding(LargePadding),
             verticalArrangement = Arrangement.spacedBy(SmallPadding)
         ) {
             DefaultTextField(
@@ -79,7 +82,7 @@ fun TaskEditDialog(
                             dueDate = date,
                         )
                     )
-                }) {
+                }, enabled = valid) {
                     Text(text = "Save")
                 }
             }

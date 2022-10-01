@@ -24,6 +24,7 @@ class ToDoRepoImpl @Inject constructor(
     override suspend fun createToDoList(toDoList: ToDoList) {
         localManager.insertList(
             toDoList.copy(
+                id = idProvider.generate(),
                 createdAt = dateTimeProvider.now(),
                 updatedAt = dateTimeProvider.now()
             ).toToDoListDb()
@@ -70,7 +71,8 @@ class ToDoRepoImpl @Inject constructor(
     ) {
         localManager.insertTask(
             task.copy(
-                id = idProvider.generate(), createdAt = dateTimeProvider.now(),
+                id = idProvider.generate(),
+                createdAt = dateTimeProvider.now(),
                 updatedAt = dateTimeProvider.now(),
             ).toToDoTaskDb(listId)
         )
