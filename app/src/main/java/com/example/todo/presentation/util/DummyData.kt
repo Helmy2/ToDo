@@ -10,12 +10,6 @@ fun dummyList() = buildList(
     muchTask = 10,
 )
 
-fun dummyCategory() = listOf(
-    Category.Today(emptyList()),
-    Category.Scheduled(emptyList()),
-    Category.All(emptyList()),
-)
-
 private fun buildList(
     muchList: Int,
     muchTask: Int,

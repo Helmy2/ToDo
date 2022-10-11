@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import java.util.*
 import javax.inject.Inject
 
 private const val TAG = "LocalManagerImpl"
@@ -30,7 +29,7 @@ class LocalManagerImpl @Inject constructor(
     }
 
     override fun getListById(id: String): Flow<ToDoList> {
-        return toDoDao.getListById(id).filterNotNull().map { it.toToDoList() }
+        return toDoDao.getListWithTaskById(id).filterNotNull().map { it.toToDoList() }
     }
 
     override suspend fun deleteList(listId: String) {
@@ -63,33 +62,7 @@ class LocalManagerImpl @Inject constructor(
         }
     }
 
-    override fun getAllTasks(): Flow<List<ToDoTaskDb>> {
-        return toDoDao.getAllTasks()
-    }
-
-    override fun getToDayTasks(): Flow<List<ToDoTaskDb>> {
-        return toDoDao.getTasksFromTo(startOfDay(), endOfDay())
-    }
-
-    override fun getScheduledTasks(): Flow<List<ToDoTaskDb>> {
-        return toDoDao.getTasksFrom(startOfDay())
-    }
-
-    private fun startOfDay(): Long {
-        val cal = Calendar.getInstance()
-        cal[Calendar.HOUR_OF_DAY] = 0
-        cal[Calendar.MINUTE] = 0
-        cal[Calendar.SECOND] = 0
-        cal[Calendar.MILLISECOND] = 0
-        return cal.timeInMillis
-    }
-
-    private fun endOfDay(): Long {
-        val cal = Calendar.getInstance()
-        cal[Calendar.HOUR_OF_DAY] = 24
-        cal[Calendar.MINUTE] = 0
-        cal[Calendar.SECOND] = 0
-        cal[Calendar.MILLISECOND] = 0
-        return cal.timeInMillis
+    override fun getAllTasks(): Flow<List<ToDoList>> {
+        return toDoDao.getListWithTask().filterNotNull().map { it.map { it.toToDoList() } }
     }
 }

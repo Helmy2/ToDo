@@ -16,11 +16,9 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val lists by viewModel.toDoListFlow.collectAsState(initial = emptyList())
-    val categories by viewModel.categoryFlow.collectAsState(initial = emptyList())
 
     HomeContent(
         lists = lists,
-        categories = categories,
         onDrawerClicked = {},
         onAddListClicked = { toDoList ->
             viewModel.addToDoList(toDoList)
@@ -31,7 +29,6 @@ fun HomeScreen(
         onDeleteListItemClick = {
             viewModel.deleteToDoList(it)
         },
-        onCategoryItemClick = {},
         onSearchClick = {}
     )
 }
