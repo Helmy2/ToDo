@@ -66,4 +66,8 @@ class ToDoRepoImpl @Inject constructor(
     override suspend fun deleteToDoTask(id: String) {
         localManager.deleteTask(id)
     }
+
+    override fun search(value: String): Flow<List<ToDoList>> {
+        return localManager.search(value)
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.todo.data.datasource.local
 
 import com.example.todo.data.datasource.local.extension.toToDoList
+import com.example.todo.data.datasource.local.extension.toToDoTask
 import com.example.todo.data.datasource.local.model.ToDoListDb
 import com.example.todo.data.datasource.local.model.ToDoTaskDb
 import com.example.todo.domian.model.ToDoList
@@ -64,5 +65,27 @@ class LocalManagerImpl @Inject constructor(
 
     override fun getAllTasks(): Flow<List<ToDoList>> {
         return toDoDao.getListWithTask().filterNotNull().map { it.map { it.toToDoList() } }
+    }
+
+    override fun search(value: String): Flow<List<ToDoList>> {
+        return toDoDao.search("%$value%").map { toListDb(it) }
+    }
+
+    private suspend fun toListDb(tasks: List<ToDoTaskDb>): List<ToDoList> {
+        return withContext(Dispatchers.IO) {
+            val list = mutableListOf<ToDoList>()
+            tasks.forEach { task ->
+                val currentList = toDoDao.getListById(task.listId).toToDoList()
+                var item = list.find { it.id == currentList.id }
+                item = if (item == null) {
+                    currentList.copy(tasks = listOf(task.toToDoTask()))
+                } else {
+                    list.remove(item)
+                    item.copy(tasks = item.tasks + task.toToDoTask())
+                }
+                list.add(item)
+            }
+            return@withContext list
+        }
     }
 }

@@ -15,4 +15,5 @@ interface ToDoRepo {
     suspend fun createToDoTask(task: ToDoTask, listId: String)
     suspend fun updateToDoTask(toDoTask: ToDoTask, listId: String)
     suspend fun deleteToDoTask(id: String)
+    fun search(value: String): Flow<List<ToDoList>>
 }

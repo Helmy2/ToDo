@@ -4,6 +4,7 @@ package com.example.todo.data.datasource.local
 import com.example.todo.data.datasource.local.model.ToDoListDb
 import com.example.todo.data.datasource.local.model.ToDoTaskDb
 import com.example.todo.domian.model.ToDoList
+import com.example.todo.domian.model.ToDoTask
 import kotlinx.coroutines.flow.Flow
 
 interface LocalManager {
@@ -17,5 +18,7 @@ interface LocalManager {
     suspend fun updateTask(task: ToDoTaskDb)
 
     fun getAllTasks(): Flow<List<ToDoList>>
+    fun search(value: String): Flow<List<ToDoList>>
+
 }
 
