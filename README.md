@@ -18,8 +18,8 @@ Tasks is a todo app based on modern Android tech-stacks especially focus on Jetp
 - Material Design
 - [Accompanist](https://github.com/google/accompanist) - A collection of extension libraries for Jetpack Compose.
 
-<img src="images/Screenshot_20221016_102227.png" width="260">
-<img src="images/Screenshot_20221016_102309.png" width="260">
-<img src="images/Screenshot_20221016_102339.png" width="260"> 
-<img src="images/Screenshot_20221016_102415.png" width="260">
-<img src="images/Screenshot_20221016_102437.png" width="260">
+<img src="images/Screenshot_20221016_102227.png" width="260"> <img src="images/Screenshot_20221016_103148.png" width="260"> 
+<img src="images/Screenshot_20221016_102309.png" width="260"> <img src="images/Screenshot_20221016_103302.png" width="260">
+<img src="images/Screenshot_20221016_102339.png" width="260"> <img src="images/Screenshot_20221016_103351.png" width="260"> 
+<img src="images/Screenshot_20221016_102415.png" width="260"> <img src="images/Screenshot_20221016_103435.png" width="260">
+<img src="images/Screenshot_20221016_102437.png" width="260"> <img src="images/Screenshot_20221016_103511.png" width="260">
